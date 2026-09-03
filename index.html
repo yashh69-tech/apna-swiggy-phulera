@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apna Swiggy Phulera - Local Food Delivery</title>
+<title>Apna Swiggy Phulera - Online Food Delivery</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -12,53 +12,52 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  /* ⚡ BOYS THEME */
+  /* 🦇 BATMAN EDITION (Gotham Stealth / Gold) */
   body.theme-boys {
-    --bg: #090e17;
-    --card: #131c2e;
-    --card-border: #1f2d47;
-    --primary: #38bdf8;
-    --primary-glow: rgba(56, 189, 248, 0.2);
+    --bg: #070709;
+    --card: #111217;
+    --card-border: #232630;
+    --primary: #facc15;
+    --primary-glow: rgba(250, 204, 21, 0.25);
     --text: #f8fafc;
     --sub: #94a3b8;
-    --nav-bg: #060910;
-    --bottom-bg: #0b111c;
-    --promo-bg: rgba(56, 189, 248, 0.1);
+    --nav-bg: #050507;
+    --bottom-bg: #0c0d12;
+    --promo-bg: rgba(250, 204, 21, 0.08);
   }
 
-  /* 🎀 GIRLS THEME */
+  /* 🌸 ROSE EDITION (Pastel Pink) */
   body.theme-girls {
     --bg: #fff1f5;
     --card: #ffffff;
-    --card-border: #fbcfe8;
+    --card-border: #fce7f3;
     --primary: #f43f5e;
     --primary-glow: rgba(244, 63, 94, 0.2);
     --text: #4c0519;
     --sub: #9f1239;
     --nav-bg: #ffe4ec;
     --bottom-bg: #ffffff;
-    --promo-bg: rgba(244, 63, 94, 0.1);
+    --promo-bg: rgba(244, 63, 94, 0.08);
   }
 
   body { background: var(--bg); color: var(--text); }
 
-  /* Header */
   header {
     background: var(--nav-bg);
-    border-bottom: 2px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
     padding: 12px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
   }
   .header-main { display: flex; justify-content: space-between; align-items: center; }
-  .brand h1 { font-size: 18px; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
-  .brand span { font-size: 11px; color: var(--primary); font-weight: 800; }
+  .brand h1 { font-size: 17px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+  .brand span { font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 1px; }
 
   .theme-switch-bar { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
   .btn-theme {
     padding: 6px 14px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
     border-radius: 20px;
     border: 1px solid var(--card-border);
@@ -66,21 +65,22 @@
     color: var(--text);
     cursor: pointer;
   }
-  .btn-theme.active { background: var(--primary); color: #fff; box-shadow: 0 2px 8px var(--primary-glow); }
+  body.theme-boys .btn-theme.active { background: #facc15; color: #000; box-shadow: 0 2px 8px var(--primary-glow); }
+  body.theme-girls .btn-theme.active { background: #f43f5e; color: #fff; box-shadow: 0 2px 8px var(--primary-glow); }
 
   .cart-indicator {
     background: var(--primary);
-    color: #fff;
-    padding: 6px 12px;
+    color: #000;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
   }
+  body.theme-girls .cart-indicator { color: #fff; }
 
   .container { max-width: 580px; margin: 0 auto; padding: 14px; }
 
-  /* Free Delivery Promo Bar */
   .delivery-banner {
     background: var(--promo-bg);
     border: 1px dashed var(--primary);
@@ -100,7 +100,7 @@
     border-radius: 12px;
     border: 1px solid var(--card-border);
   }
-  .shop-select-box label { font-size: 11px; color: var(--sub); margin-bottom: 6px; display: block; font-weight: 800; }
+  .shop-select-box label { font-size: 10px; color: var(--sub); margin-bottom: 6px; display: block; font-weight: 800; letter-spacing: 0.5px; }
   .shop-select-box select {
     width: 100%;
     padding: 10px;
@@ -108,23 +108,24 @@
     border: 1px solid var(--card-border);
     color: var(--text);
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
     outline: none;
   }
 
-  .menu-title { font-size: 13px; color: var(--sub); font-weight: 900; letter-spacing: 1.5px; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .menu-title { font-size: 12px; color: var(--sub); font-weight: 900; letter-spacing: 1px; margin-bottom: 12px; display: flex; justify-content: space-between; }
   .item-card {
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .item-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .item-price { font-size: 14px; color: var(--primary); font-weight: 900; }
+  .item-info h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .item-price { font-size: 14px; color: var(--primary); font-weight: 800; }
 
   .qty-controls {
     display: flex;
@@ -135,46 +136,46 @@
     border-radius: 8px;
     padding: 4px 8px;
   }
-  .btn-qty { background: none; border: none; color: var(--text); font-size: 18px; font-weight: bold; cursor: pointer; width: 24px; }
+  .btn-qty { background: none; border: none; color: var(--text); font-size: 16px; font-weight: bold; cursor: pointer; width: 22px; }
   .qty-val { font-size: 13px; font-weight: 800; min-width: 18px; text-align: center; }
 
-  /* Bottom Floating Bar */
   .bottom-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     background: var(--bottom-bg);
-    border-top: 2px solid var(--card-border);
+    border-top: 1px solid var(--card-border);
     padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 99;
   }
-  .total-info .label { font-size: 11px; color: var(--sub); font-weight: bold; }
-  .total-info .amount { font-size: 19px; font-weight: 900; color: var(--text); }
-  .total-info .fee-status { font-size: 10px; font-weight: 800; }
+  .total-info .label { font-size: 10px; color: var(--sub); font-weight: 700; letter-spacing: 0.5px; }
+  .total-info .amount { font-size: 18px; font-weight: 900; color: var(--text); }
+  .total-info .fee-status { font-size: 11px; font-weight: 800; }
   .fee-free { color: #22c55e; }
   .fee-charged { color: #f97316; }
 
   .btn-checkout {
     background: var(--primary);
-    color: #fff;
+    color: #000;
     border: none;
-    font-weight: 900;
-    padding: 11px 20px;
-    border-radius: 10px;
+    font-weight: 800;
+    padding: 12px 20px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 13px;
+    letter-spacing: 0.5px;
   }
+  body.theme-girls .btn-checkout { color: #fff; }
 
-  /* Modal */
   #checkoutModal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.85);
     z-index: 101;
     align-items: flex-end;
     justify-content: center;
@@ -183,11 +184,11 @@
     background: var(--card);
     width: 100%;
     max-width: 520px;
-    border-radius: 20px 20px 0 0;
+    border-radius: 18px 18px 0 0;
     padding: 22px;
     border: 1px solid var(--card-border);
   }
-  .modal-sheet h2 { font-size: 18px; margin-bottom: 12px; font-weight: 900; }
+  .modal-sheet h2 { font-size: 17px; margin-bottom: 12px; font-weight: 800; }
   .modal-sheet input, .modal-sheet textarea, .modal-sheet select {
     width: 100%;
     padding: 11px;
@@ -202,13 +203,14 @@
   .btn-send-order {
     width: 100%;
     background: #25d366;
-    color: #000;
+    color: #0b0f17;
     font-weight: 900;
     padding: 13px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
+    letter-spacing: 0.5px;
   }
   .btn-close {
     width: 100%;
@@ -219,7 +221,8 @@
     border-radius: 8px;
     margin-top: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 12px;
   }
 </style>
 </head>
@@ -228,25 +231,25 @@
 <header>
   <div class="header-main">
     <div class="brand">
-      <h1 id="brandHeading">🛵 APNA SWIGGY</h1>
-      <span id="themeBadge">PHULERA DIRECT DELIVERY</span>
+      <h1 id="brandHeading">🦇 APNA SWIGGY</h1>
+      <span id="themeBadge">BATMAN GOTHAM EDITION</span>
     </div>
-    <div class="cart-indicator" onclick="openCheckout()">🛒 <span id="cartCount">0</span></div>
+    <div class="cart-indicator" onclick="openCheckout()">CART: <span id="cartCount">0</span></div>
   </div>
 
   <div class="theme-switch-bar">
-    <button class="btn-theme active" id="btnBoys" onclick="setTheme('boys')">⚡ Boys Mode</button>
-    <button class="btn-theme" id="btnGirls" onclick="setTheme('girls')">🎀 Girls Mode (Kitty)</button>
+    <button class="btn-theme active" id="btnBoys" onclick="setTheme('boys')">🦇 Batman Edition</button>
+    <button class="btn-theme" id="btnGirls" onclick="setTheme('girls')">🌸 Rose Edition</button>
   </div>
 </header>
 
 <div class="container">
   <div class="delivery-banner" id="promoBanner">
-    🚚 ₹199 ka order karne par Delivery FREE!
+    Free delivery on all orders above ₹199
   </div>
 
   <div class="shop-select-box">
-    <label>SELECT SHOP / RESTAURANT</label>
+    <label>SELECT OUTLET</label>
     <select id="shopSelect" onchange="switchShop()">
       <option value="station">Station Road Fast Food Corner</option>
       <option value="sweet">Shree Krishna Mishthan Bhandar</option>
@@ -255,34 +258,34 @@
   </div>
 
   <div class="menu-title">
-    <span>MENU LIST</span>
-    <span id="mascotIcon">⚡ Cyber Mode</span>
+    <span>MENU CATALOG</span>
+    <span id="mascotIcon">🦇 Gotham Mode</span>
   </div>
   <div id="menuContainer"></div>
 </div>
 
 <div class="bottom-bar">
   <div class="total-info">
-    <div class="label">TOTAL (INC. DELIVERY)</div>
+    <div class="label">ESTIMATED TOTAL</div>
     <div class="amount">₹<span id="grandTotalDisplay">0</span></div>
     <div class="fee-status" id="deliveryStatusLabel">Delivery: ₹20</div>
   </div>
-  <button class="btn-checkout" onclick="openCheckout()">ORDER NOW ➔</button>
+  <button class="btn-checkout" onclick="openCheckout()">PROCEED ➔</button>
 </div>
 
 <div id="checkoutModal">
   <div class="modal-sheet">
     <h2 id="checkoutTitle">Delivery Details</h2>
-    <input type="text" id="custName" placeholder="Aapka Naam">
-    <input type="tel" id="custPhone" placeholder="WhatsApp Mobile Number">
-    <textarea id="custAddress" rows="2" placeholder="Gali / Mohalla / Landmark (Phulera)"></textarea>
+    <input type="text" id="custName" placeholder="Full Name">
+    <input type="tel" id="custPhone" placeholder="10-Digit Mobile Number">
+    <textarea id="custAddress" rows="2" placeholder="Street / Landmark / House No. (Phulera)"></textarea>
     
     <select id="custPayMode">
-      <option value="Cash on Delivery (COD)">💵 Cash on Delivery (Ghar aane par Cash)</option>
-      <option value="UPI / QR on Delivery">📲 UPI / QR on Delivery (Ghar aane par Scan & Pay)</option>
+      <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+      <option value="UPI / QR Code">UPI / QR Code on Delivery</option>
     </select>
 
-    <button class="btn-send-order" onclick="sendOrderViaWhatsApp()">CONFIRM & WHATSAPP ORDER</button>
+    <button class="btn-send-order" onclick="sendOrderViaWhatsApp()">PLACE ORDER VIA WHATSAPP</button>
     <button class="btn-close" onclick="closeCheckout()">Cancel</button>
   </div>
 </div>
@@ -295,22 +298,22 @@
 
   const menus = {
     station: [
-      { id: 's1', name: 'Veg Cheese Burger 🍔', price: 60 },
-      { id: 's2', name: 'Crispy French Fries 🍟', price: 70 },
-      { id: 's3', name: 'Paneer Masala Patties 🥐', price: 35 },
-      { id: 's4', name: 'Cold Coffee with Ice Cream ☕', price: 60 }
+      { id: 's1', name: 'Veg Cheese Burger', price: 60 },
+      { id: 's2', name: 'Crispy French Fries', price: 70 },
+      { id: 's3', name: 'Paneer Masala Patties', price: 35 },
+      { id: 's4', name: 'Cold Coffee with Ice Cream', price: 60 }
     ],
     sweet: [
-      { id: 'sw1', name: 'Special Pyaz Kachori (2 Pcs) 🥟', price: 40 },
-      { id: 'sw2', name: 'Desi Ghee Samosa (2 Pcs) 🥟', price: 30 },
-      { id: 'sw3', name: 'Kaju Katli (250g) 🍬', price: 240 },
-      { id: 'sw4', name: 'Hot Gulab Jamun (4 Pcs) 🍯', price: 60 }
+      { id: 'sw1', name: 'Special Pyaz Kachori (2 Pcs)', price: 40 },
+      { id: 'sw2', name: 'Desi Ghee Samosa (2 Pcs)', price: 30 },
+      { id: 'sw3', name: 'Kaju Katli (250g)', price: 240 },
+      { id: 'sw4', name: 'Hot Gulab Jamun (4 Pcs)', price: 60 }
     ],
     cafe: [
-      { id: 'c1', name: 'Cheesy Grilled Sandwich 🥪', price: 80 },
-      { id: 'c2', name: 'Creamy White Sauce Pasta 🍝', price: 120 },
-      { id: 'c3', name: 'Oreo Thick Shake 🧋', price: 70 },
-      { id: 'c4', name: 'Farmhouse Pizza (Small) 🍕', price: 130 }
+      { id: 'c1', name: 'Cheesy Grilled Sandwich', price: 80 },
+      { id: 'c2', name: 'Creamy White Sauce Pasta', price: 120 },
+      { id: 'c3', name: 'Oreo Thick Shake', price: 70 },
+      { id: 'c4', name: 'Farmhouse Pizza (Regular)', price: 130 }
     ]
   };
 
@@ -328,16 +331,16 @@
       body.className = 'theme-girls';
       btnG.classList.add('active');
       btnB.classList.remove('active');
-      brand.innerHTML = "🎀 APNA SWIGGY";
-      badge.textContent = "KITTY PINK SPECIAL • PHULERA";
-      mascot.textContent = "🐾 Kitty Mode";
+      brand.innerHTML = "🌸 APNA SWIGGY";
+      badge.textContent = "ROSE EDITION • PHULERA";
+      mascot.textContent = "🌸 Rose Mode";
     } else {
       body.className = 'theme-boys';
       btnB.classList.add('active');
       btnG.classList.remove('active');
-      brand.innerHTML = "🛵 APNA SWIGGY";
-      badge.textContent = "BOYS STEALTH EDITION • PHULERA";
-      mascot.textContent = "⚡ Cyber Mode";
+      brand.innerHTML = "🦇 APNA SWIGGY";
+      badge.textContent = "BATMAN GOTHAM EDITION • PHULERA";
+      mascot.textContent = "🦇 Gotham Mode";
     }
   }
 
@@ -400,18 +403,18 @@
 
     if (foodTotal === 0) {
       deliveryFee = 0;
-      banner.textContent = "🚚 ₹199 ka order karne par Delivery FREE!";
+      banner.textContent = "Free delivery on all orders above ₹199";
       feeLabel.textContent = `Delivery: ₹${BASE_DELIVERY_FEE}`;
       feeLabel.className = "fee-status";
     } else if (foodTotal >= FREE_DELIVERY_THRESHOLD) {
       deliveryFee = 0;
-      banner.textContent = "🎉 Badhai ho! Aapko mili FREE DELIVERY!";
+      banner.textContent = "Congratulations! Free Delivery Unlocked";
       feeLabel.textContent = "Delivery: FREE";
       feeLabel.className = "fee-status fee-free";
     } else {
       deliveryFee = BASE_DELIVERY_FEE;
       let left = FREE_DELIVERY_THRESHOLD - foodTotal;
-      banner.textContent = `⚡ Bas ₹${left} ka aur add karein aur paayein FREE DELIVERY!`;
+      banner.textContent = `Add items worth ₹${left} more for Free Delivery`;
       feeLabel.textContent = `Delivery: +₹${BASE_DELIVERY_FEE}`;
       feeLabel.className = "fee-status fee-charged";
     }
@@ -422,7 +425,7 @@
 
   function openCheckout() {
     if (Object.keys(cart).length === 0) {
-      alert("Pehle menu se items select karein!");
+      alert("Please select items from the menu first.");
       return;
     }
     document.getElementById('checkoutModal').style.display = 'flex';
@@ -440,7 +443,7 @@
     const shopName = document.getElementById('shopSelect').options[document.getElementById('shopSelect').selectedIndex].text;
 
     if (!name || !phone || !addr) {
-      alert("Kripya apna naam, mobile number aur address pura bharein!");
+      alert("Please complete all delivery details (Name, Contact, Address).");
       return;
     }
 
@@ -457,25 +460,24 @@
     let deliveryFee = isFreeDelivery ? 0 : BASE_DELIVERY_FEE;
     let grandTotal = foodTotal + deliveryFee;
 
-    let message = `*--- NAYA ORDER (APNA SWIGGY PHULERA) ---*\n` +
-                  `*Shop:* ${shopName}\n\n` +
-                  `*ITEMS:*\n${billItemsText}\n` +
-                  `*Food Subtotal:* ₹${foodTotal}\n` +
-                  `*Delivery Charges:* ${isFreeDelivery ? "FREE (Offer Applied)" : "₹" + BASE_DELIVERY_FEE}\n` +
-                  `*GRAND TOTAL:* ₹${grandTotal}\n` +
-                  `*PAYMENT MODE:* ${payMode}\n\n` +
-                  `*CUSTOMER DETAILS:*\n` +
-                  `• Name: ${name}\n` +
-                  `• Contact: ${phone}\n` +
-                  `• Delivery Address: ${addr}\n` +
-                  `-----------------------------------`;
+    let rawMessage = `*--- NEW ORDER DISPATCH ---*\n` +
+                     `*Outlet:* ${shopName}\n\n` +
+                     `*ORDER SUMMARY:*\n${billItemsText}\n` +
+                     `*Item Total:* ₹${foodTotal}\n` +
+                     `*Delivery Fee:* ${isFreeDelivery ? "FREE (Offer Applied)" : "₹" + BASE_DELIVERY_FEE}\n` +
+                     `*Total Payable:* ₹${grandTotal}\n` +
+                     `*Payment Mode:* ${payMode}\n\n` +
+                     `*CUSTOMER DETAILS:*\n` +
+                     `• Name: ${name}\n` +
+                     `• Contact: ${phone}\n` +
+                     `• Address: ${addr}\n` +
+                     `-----------------------------------`;
 
-    const encodedMsg = encodeURI(message);
-    window.open(`https://wa.me/${MY_DELIVERY_WHATSAPP}?text=${encodedMsg}`, '_blank');
+    const encodedMsg = encodeURIComponent(rawMessage);
+    window.open(`https://api.whatsapp.com/send?phone=${MY_DELIVERY_WHATSAPP}&text=${encodedMsg}`, '_blank');
   }
 
   renderMenu();
 </script>
 </body>
 </html>
-
