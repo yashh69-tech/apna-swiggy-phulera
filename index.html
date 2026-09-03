@@ -3,481 +3,509 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apna Swiggy Phulera - Online Food Delivery</title>
+<title>Phulera Eats - No Cap Food Delivery</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding-bottom: 110px;
-    transition: background 0.3s, color 0.3s;
+    padding-bottom: 120px;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
-  /* 🦇 BATMAN EDITION (Gotham Stealth / Gold) */
-  body.theme-boys {
-    --bg: #070709;
-    --card: #111217;
-    --card-border: #232630;
-    --primary: #facc15;
-    --primary-glow: rgba(250, 204, 21, 0.25);
+  /* 🦇 GOTHAM BAT-STEALTH (Gen Z Dark) */
+  body.theme-batman {
+    --bg: #090a0f;
+    --card: #12151f;
+    --card-border: #1e2433;
+    --accent: #facc15;
+    --accent-glow: rgba(250, 204, 21, 0.25);
     --text: #f8fafc;
     --sub: #94a3b8;
-    --nav-bg: #050507;
-    --bottom-bg: #0c0d12;
-    --promo-bg: rgba(250, 204, 21, 0.08);
+    --nav: #05070a;
+    --bottom: #0e1118;
+    --tag-bg: rgba(250, 204, 21, 0.12);
   }
 
-  /* 🌸 ROSE EDITION (Pastel Pink) */
-  body.theme-girls {
-    --bg: #fff1f5;
+  /* 🎀 COQUETTE / BARBIE CORE (Gen Z Pink) */
+  body.theme-pink {
+    --bg: #fff0f5;
     --card: #ffffff;
-    --card-border: #fce7f3;
-    --primary: #f43f5e;
-    --primary-glow: rgba(244, 63, 94, 0.2);
+    --card-border: #fbcfe8;
+    --accent: #f43f5e;
+    --accent-glow: rgba(244, 63, 94, 0.25);
     --text: #4c0519;
     --sub: #9f1239;
-    --nav-bg: #ffe4ec;
-    --bottom-bg: #ffffff;
-    --promo-bg: rgba(244, 63, 94, 0.08);
+    --nav: #ffe4ec;
+    --bottom: #ffffff;
+    --tag-bg: rgba(244, 63, 94, 0.12);
   }
 
   body { background: var(--bg); color: var(--text); }
 
+  /* Header */
   header {
-    background: var(--nav-bg);
+    background: var(--nav);
     border-bottom: 1px solid var(--card-border);
-    padding: 12px 16px;
+    padding: 14px 18px;
     position: sticky;
     top: 0;
     z-index: 100;
   }
   .header-main { display: flex; justify-content: space-between; align-items: center; }
-  .brand h1 { font-size: 17px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
-  .brand span { font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 1px; }
+  .brand-title { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; }
+  .brand-tag { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
 
-  .theme-switch-bar { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
-  .btn-theme {
+  .cart-pill {
+    background: var(--accent);
+    color: #000;
     padding: 6px 14px;
-    font-size: 11px;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--accent-glow);
+  }
+  body.theme-pink .cart-pill { color: #fff; }
+
+  /* Vibe Switcher */
+  .vibe-switch-bar { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+  .vibe-btn {
+    padding: 7px 18px;
+    font-size: 12px;
     font-weight: 800;
     border-radius: 20px;
     border: 1px solid var(--card-border);
     background: var(--card);
     color: var(--text);
     cursor: pointer;
+    transition: 0.2s;
   }
-  body.theme-boys .btn-theme.active { background: #facc15; color: #000; box-shadow: 0 2px 8px var(--primary-glow); }
-  body.theme-girls .btn-theme.active { background: #f43f5e; color: #fff; box-shadow: 0 2px 8px var(--primary-glow); }
+  body.theme-batman .vibe-btn.active { background: var(--accent); color: #000; }
+  body.theme-pink .vibe-btn.active { background: var(--accent); color: #fff; }
 
-  .cart-indicator {
-    background: var(--primary);
-    color: #000;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  body.theme-girls .cart-indicator { color: #fff; }
+  .container { max-width: 580px; margin: 0 auto; padding: 16px; }
 
-  .container { max-width: 580px; margin: 0 auto; padding: 14px; }
-
-  .delivery-banner {
-    background: var(--promo-bg);
-    border: 1px dashed var(--primary);
-    border-radius: 10px;
+  /* Vibe Banners */
+  .vibe-banner {
+    background: var(--tag-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
     padding: 10px 14px;
     margin-bottom: 14px;
     font-size: 12px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--text);
-  }
-
-  .shop-select-box {
-    margin-bottom: 16px;
-    background: var(--card);
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid var(--card-border);
-  }
-  .shop-select-box label { font-size: 10px; color: var(--sub); margin-bottom: 6px; display: block; font-weight: 800; letter-spacing: 0.5px; }
-  .shop-select-box select {
-    width: 100%;
-    padding: 10px;
-    background: var(--bg);
-    border: 1px solid var(--card-border);
-    color: var(--text);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    outline: none;
-  }
-
-  .menu-title { font-size: 12px; color: var(--sub); font-weight: 900; letter-spacing: 1px; margin-bottom: 12px; display: flex; justify-content: space-between; }
-  .item-card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
+    font-weight: 800;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .item-info h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-  .item-price { font-size: 14px; color: var(--primary); font-weight: 800; }
 
-  .qty-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  /* Outlet Selector */
+  .outlet-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .outlet-box label { font-size: 11px; font-weight: 900; color: var(--sub); display: block; margin-bottom: 8px; text-transform: uppercase; }
+  .outlet-box select {
+    width: 100%;
+    padding: 12px;
     background: var(--bg);
     border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 4px 8px;
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
   }
-  .btn-qty { background: none; border: none; color: var(--text); font-size: 16px; font-weight: bold; cursor: pointer; width: 22px; }
-  .qty-val { font-size: 13px; font-weight: 800; min-width: 18px; text-align: center; }
 
-  .bottom-bar {
+  .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; font-weight: 900; color: var(--sub); }
+
+  /* Cards */
+  .card-item {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-item h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .card-item .price { font-size: 15px; font-weight: 900; color: var(--accent); }
+  .card-item .tags { font-size: 10px; opacity: 0.7; font-weight: 700; }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 4px 8px;
+    gap: 8px;
+  }
+  .stepper button { background: none; border: none; color: var(--text); font-size: 18px; font-weight: 900; cursor: pointer; width: 24px; }
+  .stepper span { font-size: 14px; font-weight: 900; min-width: 16px; text-align: center; }
+
+  /* Floating Bottom Check */
+  .checkout-strip {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bottom-bg);
+    background: var(--bottom);
     border-top: 1px solid var(--card-border);
-    padding: 12px 18px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 99;
   }
-  .total-info .label { font-size: 10px; color: var(--sub); font-weight: 700; letter-spacing: 0.5px; }
-  .total-info .amount { font-size: 18px; font-weight: 900; color: var(--text); }
-  .total-info .fee-status { font-size: 11px; font-weight: 800; }
-  .fee-free { color: #22c55e; }
-  .fee-charged { color: #f97316; }
+  .checkout-strip .price-wrap span { font-size: 11px; font-weight: 800; color: var(--sub); display: block; }
+  .checkout-strip .price-wrap h2 { font-size: 20px; font-weight: 900; }
 
-  .btn-checkout {
-    background: var(--primary);
+  .order-btn {
+    background: var(--accent);
     color: #000;
     border: none;
-    font-weight: 800;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    font-weight: 900;
+    padding: 13px 24px;
+    border-radius: 12px;
     font-size: 13px;
-    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--accent-glow);
   }
-  body.theme-girls .btn-checkout { color: #fff; }
+  body.theme-pink .order-btn { color: #fff; }
 
-  #checkoutModal {
+  /* Modal */
+  #orderModal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 101;
+    background: rgba(0,0,0,0.8);
+    z-index: 105;
     align-items: flex-end;
     justify-content: center;
   }
-  .modal-sheet {
+  .sheet {
     background: var(--card);
     width: 100%;
     max-width: 520px;
-    border-radius: 18px 18px 0 0;
+    border-radius: 22px 22px 0 0;
     padding: 22px;
     border: 1px solid var(--card-border);
+    max-height: 85vh;
+    overflow-y: auto;
   }
-  .modal-sheet h2 { font-size: 17px; margin-bottom: 12px; font-weight: 800; }
-  .modal-sheet input, .modal-sheet textarea, .modal-sheet select {
+  .sheet h2 { font-size: 18px; font-weight: 900; margin-bottom: 12px; }
+  .sheet input, .sheet textarea, .sheet select {
     width: 100%;
-    padding: 11px;
+    padding: 12px;
     background: var(--bg);
     border: 1px solid var(--card-border);
-    border-radius: 8px;
+    border-radius: 10px;
     color: var(--text);
     margin-bottom: 10px;
     font-size: 13px;
+    font-weight: 600;
     outline: none;
   }
-  .btn-send-order {
+
+  .split-box {
+    background: var(--bg);
+    border: 1px dashed var(--card-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .split-box input { width: 60px; margin-bottom: 0; padding: 6px; text-align: center; }
+
+  .dispatch-btn {
     width: 100%;
-    background: #25d366;
-    color: #0b0f17;
+    background: #22c55e;
+    color: #000;
     font-weight: 900;
-    padding: 13px;
+    padding: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 14px;
     cursor: pointer;
-    letter-spacing: 0.5px;
   }
-  .btn-close {
+  .close-modal-btn {
     width: 100%;
     background: transparent;
-    border: 1px solid var(--card-border);
+    border: none;
     color: var(--sub);
-    padding: 9px;
-    border-radius: 8px;
-    margin-top: 8px;
+    padding: 10px;
+    margin-top: 6px;
+    font-weight: 800;
     cursor: pointer;
-    font-weight: 700;
     font-size: 12px;
   }
 </style>
 </head>
-<body class="theme-boys">
+<body class="theme-batman">
 
 <header>
   <div class="header-main">
-    <div class="brand">
-      <h1 id="brandHeading">🦇 APNA SWIGGY</h1>
-      <span id="themeBadge">BATMAN GOTHAM EDITION</span>
+    <div>
+      <h1 class="brand-title" id="logoText">🦇 PHULERA EATS</h1>
+      <div class="brand-tag" id="modeTag">GOTHAM EDITION • DROP ZERO</div>
     </div>
-    <div class="cart-indicator" onclick="openCheckout()">CART: <span id="cartCount">0</span></div>
+    <div class="cart-pill" onclick="openOrderSheet()">CART: <span id="cartCount">0</span></div>
   </div>
 
-  <div class="theme-switch-bar">
-    <button class="btn-theme active" id="btnBoys" onclick="setTheme('boys')">🦇 Batman Edition</button>
-    <button class="btn-theme" id="btnGirls" onclick="setTheme('girls')">🌸 Rose Edition</button>
+  <div class="vibe-switch-bar">
+    <button class="vibe-btn active" id="btnBat" onclick="switchTheme('batman')">🦇 Gotham Stealth</button>
+    <button class="vibe-btn" id="btnCoquette" onclick="switchTheme('pink')">🎀 Barbie Coquette</button>
   </div>
 </header>
 
 <div class="container">
-  <div class="delivery-banner" id="promoBanner">
-    Free delivery on all orders above ₹199
+  <div class="vibe-banner">
+    <span id="bannerMsg">⚡ Free Delivery unlocked over ₹199</span>
+    <span id="bannerMoji">🛵 Fast AF</span>
   </div>
 
-  <div class="shop-select-box">
-    <label>SELECT OUTLET</label>
-    <select id="shopSelect" onchange="switchShop()">
-      <option value="station">Station Road Fast Food Corner</option>
-      <option value="sweet">Shree Krishna Mishthan Bhandar</option>
-      <option value="cafe">Town Central Cafe & Shakes</option>
+  <div class="outlet-box">
+    <label>Choose Spot</label>
+    <select id="outletSelect" onchange="renderMenu()">
+      <option value="station">Station Fast Food (Burgers & Cold Brews)</option>
+      <option value="sweet">Shree Krishna (Samosa & Kaju Katli)</option>
+      <option value="cafe">Town Central (Cheesy Fries & Pizzas)</option>
     </select>
   </div>
 
-  <div class="menu-title">
-    <span>MENU CATALOG</span>
-    <span id="mascotIcon">🦇 Gotham Mode</span>
+  <div class="catalog-header">
+    <span>LATE NIGHT DROPS</span>
+    <span id="mascotTag">Bat-Protocol Active</span>
   </div>
-  <div id="menuContainer"></div>
+
+  <div id="itemsGrid"></div>
 </div>
 
-<div class="bottom-bar">
-  <div class="total-info">
-    <div class="label">ESTIMATED TOTAL</div>
-    <div class="amount">₹<span id="grandTotalDisplay">0</span></div>
-    <div class="fee-status" id="deliveryStatusLabel">Delivery: ₹20</div>
+<div class="checkout-strip">
+  <div class="price-wrap">
+    <span>TOTAL BILL</span>
+    <h2>₹<span id="totalDisplay">0</span></h2>
   </div>
-  <button class="btn-checkout" onclick="openCheckout()">PROCEED ➔</button>
+  <button class="order-btn" onclick="openOrderSheet()">CHECKOUT ➔</button>
 </div>
 
-<div id="checkoutModal">
-  <div class="modal-sheet">
-    <h2 id="checkoutTitle">Delivery Details</h2>
-    <input type="text" id="custName" placeholder="Full Name">
-    <input type="tel" id="custPhone" placeholder="10-Digit Mobile Number">
-    <textarea id="custAddress" rows="2" placeholder="Street / Landmark / House No. (Phulera)"></textarea>
+<div id="orderModal">
+  <div class="sheet">
+    <h2>Secure Your Drop</h2>
     
-    <select id="custPayMode">
-      <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-      <option value="UPI / QR Code">UPI / QR Code on Delivery</option>
+    <div class="split-box">
+      <span>Split with squad?</span>
+      <div>
+        <input type="number" id="splitCount" min="1" max="10" value="1" oninput="calculateSplit()">
+        <span style="font-size: 10px; opacity:0.8;">heads</span>
+      </div>
+    </div>
+    <div id="splitResult" style="font-size: 11px; font-weight:800; color: var(--accent); margin-bottom: 10px;"></div>
+
+    <input type="text" id="orderName" placeholder="What's your name?">
+    <input type="tel" id="orderPhone" placeholder="10-digit WhatsApp number">
+    <textarea id="orderAddress" rows="2" placeholder="Exact Location / Landmark / Room No. (Phulera)"></textarea>
+
+    <select id="orderPay">
+      <option value="UPI / QR Code on Delivery">📲 UPI / QR Scan on Drop</option>
+      <option value="Cash on Delivery">💵 Cash on Delivery</option>
     </select>
 
-    <button class="btn-send-order" onclick="sendOrderViaWhatsApp()">PLACE ORDER VIA WHATSAPP</button>
-    <button class="btn-close" onclick="closeCheckout()">Cancel</button>
+    <button class="dispatch-btn" onclick="dispatchOrder()">DISPATCH VIA WHATSAPP</button>
+    <button class="close-modal-btn" onclick="closeOrderSheet()">Close</button>
   </div>
 </div>
 
 <script>
-  const MY_DELIVERY_WHATSAPP = "917665219980"; 
-
-  const FREE_DELIVERY_THRESHOLD = 199;
-  const BASE_DELIVERY_FEE = 20;
+  const WHATSAPP_NUMBER = "917665219980";
 
   const menus = {
     station: [
-      { id: 's1', name: 'Veg Cheese Burger', price: 60 },
-      { id: 's2', name: 'Crispy French Fries', price: 70 },
-      { id: 's3', name: 'Paneer Masala Patties', price: 35 },
-      { id: 's4', name: 'Cold Coffee with Ice Cream', price: 60 }
+      { id: 's1', name: 'Crispy Double-Cheese Burger', price: 60, tag: 'Bestseller 🔥', shop: 'Station Fast Food' },
+      { id: 's2', name: 'Peri Peri Seasoned Fries', price: 70, tag: 'Must Try 🍟', shop: 'Station Fast Food' },
+      { id: 's3', name: 'Stuffed Paneer Patties', price: 35, tag: 'Crispy ✨', shop: 'Station Fast Food' },
+      { id: 's4', name: 'Iced Cold Coffee with Scoop', price: 60, tag: 'Chilled ☕', shop: 'Station Fast Food' }
     ],
     sweet: [
-      { id: 'sw1', name: 'Special Pyaz Kachori (2 Pcs)', price: 40 },
-      { id: 'sw2', name: 'Desi Ghee Samosa (2 Pcs)', price: 30 },
-      { id: 'sw3', name: 'Kaju Katli (250g)', price: 240 },
-      { id: 'sw4', name: 'Hot Gulab Jamun (4 Pcs)', price: 60 }
+      { id: 'sw1', name: 'Special Masala Pyaz Kachori (2 Pcs)', price: 40, tag: 'Spicy 🥟', shop: 'Shree Krishna' },
+      { id: 'sw2', name: 'Desi Ghee Samosa (2 Pcs)', price: 30, tag: 'Classic 🥟', shop: 'Shree Krishna' },
+      { id: 'sw3', name: 'Premium Kaju Katli (250g)', price: 240, tag: 'Pure Desi 🍬', shop: 'Shree Krishna' },
+      { id: 'sw4', name: 'Hot Sugar Syrup Gulab Jamun (4 Pcs)', price: 60, tag: 'Sweet Tooth 🍯', shop: 'Shree Krishna' }
     ],
     cafe: [
-      { id: 'c1', name: 'Cheesy Grilled Sandwich', price: 80 },
-      { id: 'c2', name: 'Creamy White Sauce Pasta', price: 120 },
-      { id: 'c3', name: 'Oreo Thick Shake', price: 70 },
-      { id: 'c4', name: 'Farmhouse Pizza (Regular)', price: 130 }
+      { id: 'c1', name: 'Four-Cheese Grilled Sandwich', price: 80, tag: 'Cheesy 🥪', shop: 'Town Central' },
+      { id: 'c2', name: 'Creamy Alfredo Pasta', price: 120, tag: 'Italian 🍝', shop: 'Town Central' },
+      { id: 'c3', name: 'Oreo Blast Thickshake', price: 70, tag: 'Thick AF 🧋', shop: 'Town Central' },
+      { id: 'c4', name: 'Farmhouse Loaded Pizza', price: 130, tag: 'Top Tier 🍕', shop: 'Town Central' }
     ]
   };
 
   let cart = {};
 
-  function setTheme(theme) {
-    const body = document.body;
-    const btnB = document.getElementById('btnBoys');
-    const btnG = document.getElementById('btnGirls');
-    const brand = document.getElementById('brandHeading');
-    const badge = document.getElementById('themeBadge');
-    const mascot = document.getElementById('mascotIcon');
+  function switchTheme(theme) {
+    const b = document.body;
+    const btnB = document.getElementById('btnBat');
+    const btnP = document.getElementById('btnCoquette');
+    const logo = document.getElementById('logoText');
+    const tag = document.getElementById('modeTag');
+    const mascot = document.getElementById('mascotTag');
 
-    if (theme === 'girls') {
-      body.className = 'theme-girls';
-      btnG.classList.add('active');
+    if (theme === 'pink') {
+      b.className = 'theme-pink';
+      btnP.classList.add('active');
       btnB.classList.remove('active');
-      brand.innerHTML = "🌸 APNA SWIGGY";
-      badge.textContent = "ROSE EDITION • PHULERA";
-      mascot.textContent = "🌸 Rose Mode";
+      logo.innerHTML = "🎀 PHULERA EATS";
+      tag.textContent = "COQUETTE PINK EDITION • CUTE VIBES";
+      mascot.textContent = "Barbie Mode ✨";
     } else {
-      body.className = 'theme-boys';
+      b.className = 'theme-batman';
       btnB.classList.add('active');
-      btnG.classList.remove('active');
-      brand.innerHTML = "🦇 APNA SWIGGY";
-      badge.textContent = "BATMAN GOTHAM EDITION • PHULERA";
-      mascot.textContent = "🦇 Gotham Mode";
+      btnP.classList.remove('active');
+      logo.innerHTML = "🦇 PHULERA EATS";
+      tag.textContent = "GOTHAM STEALTH • DROP ZERO";
+      mascot.textContent = "Bat-Protocol Active ⚡";
     }
-  }
-
-  function switchShop() {
-    cart = {};
-    renderMenu();
-    updateCartUI();
   }
 
   function renderMenu() {
-    const shop = document.getElementById('shopSelect').value;
-    const items = menus[shop];
-    const container = document.getElementById('menuContainer');
-    container.innerHTML = "";
+    const shopKey = document.getElementById('outletSelect').value;
+    const items = menus[shopKey];
+    const grid = document.getElementById('itemsGrid');
+    grid.innerHTML = "";
 
     items.forEach(item => {
-      const qty = cart[item.id] ? cart[item.id].qty : 0;
+      const count = cart[item.id] ? cart[item.id].qty : 0;
       const card = document.createElement('div');
-      card.className = 'item-card';
+      card.className = 'card-item';
       card.innerHTML = `
-        <div class="item-info">
+        <div>
           <h3>${item.name}</h3>
-          <div class="item-price">₹${item.price}</div>
+          <div class="tags">${item.tag}</div>
+          <div class="price">₹${item.price}</div>
         </div>
-        <div class="qty-controls">
-          <button class="btn-qty" onclick="changeQty('${item.id}', '${item.name}', ${item.price}, -1)">-</button>
-          <span class="qty-val" id="qty_${item.id}">${qty}</span>
-          <button class="btn-qty" onclick="changeQty('${item.id}', '${item.name}', ${item.price}, 1)">+</button>
+        <div class="stepper">
+          <button onclick="updateItem('${item.id}', '${item.name}', ${item.price}, '${item.shop}', -1)">-</button>
+          <span>${count}</span>
+          <button onclick="updateItem('${item.id}', '${item.name}', ${item.price}, '${item.shop}', 1)">+</button>
         </div>
       `;
-      container.appendChild(card);
+      grid.appendChild(card);
     });
   }
 
-  function changeQty(id, name, price, delta) {
-    if (!cart[id]) cart[id] = { name: name, price: price, qty: 0 };
+  function updateItem(id, name, price, shop, delta) {
+    if (!cart[id]) cart[id] = { name: name, price: price, shop: shop, qty: 0 };
     cart[id].qty += delta;
 
-    if (cart[id].qty <= 0) {
-      delete cart[id];
-      const el = document.getElementById(`qty_${id}`);
-      if(el) el.textContent = 0;
-    } else {
-      const el = document.getElementById(`qty_${id}`);
-      if(el) el.textContent = cart[id].qty;
-    }
-    updateCartUI();
+    if (cart[id].qty <= 0) delete cart[id];
+
+    renderMenu();
+    updateCartStats();
   }
 
-  function updateCartUI() {
-    let foodTotal = 0, count = 0;
-    for (let id in cart) {
-      foodTotal += cart[id].price * cart[id].qty;
-      count += cart[id].qty;
+  function updateCartStats() {
+    let sub = 0, count = 0;
+    for (let k in cart) {
+      sub += cart[k].price * cart[k].qty;
+      count += cart[k].qty;
     }
 
-    const banner = document.getElementById('promoBanner');
-    const feeLabel = document.getElementById('deliveryStatusLabel');
-    let deliveryFee = 0;
-
-    if (foodTotal === 0) {
-      deliveryFee = 0;
-      banner.textContent = "Free delivery on all orders above ₹199";
-      feeLabel.textContent = `Delivery: ₹${BASE_DELIVERY_FEE}`;
-      feeLabel.className = "fee-status";
-    } else if (foodTotal >= FREE_DELIVERY_THRESHOLD) {
-      deliveryFee = 0;
-      banner.textContent = "Congratulations! Free Delivery Unlocked";
-      feeLabel.textContent = "Delivery: FREE";
-      feeLabel.className = "fee-status fee-free";
-    } else {
-      deliveryFee = BASE_DELIVERY_FEE;
-      let left = FREE_DELIVERY_THRESHOLD - foodTotal;
-      banner.textContent = `Add items worth ₹${left} more for Free Delivery`;
-      feeLabel.textContent = `Delivery: +₹${BASE_DELIVERY_FEE}`;
-      feeLabel.className = "fee-status fee-charged";
-    }
+    let delFee = sub >= 199 || sub === 0 ? 0 : 20;
+    let total = sub + delFee;
 
     document.getElementById('cartCount').textContent = count;
-    document.getElementById('grandTotalDisplay').textContent = foodTotal + deliveryFee;
+    document.getElementById('totalDisplay').textContent = total;
+
+    const banner = document.getElementById('bannerMsg');
+    if (sub === 0) banner.textContent = "⚡ Free Delivery unlocked over ₹199";
+    else if (sub >= 199) banner.textContent = "🎉 Free Delivery Unlocked (W Move!)";
+    else banner.textContent = `Add ₹${199 - sub} more for FREE delivery`;
+
+    calculateSplit();
   }
 
-  function openCheckout() {
+  function calculateSplit() {
+    let total = parseInt(document.getElementById('totalDisplay').textContent) || 0;
+    let heads = parseInt(document.getElementById('splitCount').value) || 1;
+    if (heads < 1) heads = 1;
+    let perHead = Math.ceil(total / heads);
+    document.getElementById('splitResult').textContent = `👉 ₹${perHead} / person (${heads} gang members)`;
+  }
+
+  function openOrderSheet() {
     if (Object.keys(cart).length === 0) {
-      alert("Please select items from the menu first.");
+      alert("Cart empty hai bro! Pehle kuch mast select kar!");
       return;
     }
-    document.getElementById('checkoutModal').style.display = 'flex';
+    calculateSplit();
+    document.getElementById('orderModal').style.display = 'flex';
   }
 
-  function closeCheckout() {
-    document.getElementById('checkoutModal').style.display = 'none';
+  function closeOrderSheet() {
+    document.getElementById('orderModal').style.display = 'none';
   }
 
-  function sendOrderViaWhatsApp() {
-    const name = document.getElementById('custName').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const addr = document.getElementById('custAddress').value.trim();
-    const payMode = document.getElementById('custPayMode').value;
-    const shopName = document.getElementById('shopSelect').options[document.getElementById('shopSelect').selectedIndex].text;
+  function dispatchOrder() {
+    const name = document.getElementById('orderName').value.trim();
+    const phone = document.getElementById('orderPhone').value.trim();
+    const addr = document.getElementById('orderAddress').value.trim();
+    const pay = document.getElementById('orderPay').value;
 
     if (!name || !phone || !addr) {
-      alert("Please complete all delivery details (Name, Contact, Address).");
+      alert("Address and Name miss mat kar bro! Pura details daalo.");
       return;
     }
 
-    let billItemsText = "";
-    let foodTotal = 0;
+    let itemsMap = {};
+    let subTotal = 0;
 
     for (let id in cart) {
-      let sub = cart[id].price * cart[id].qty;
-      foodTotal += sub;
-      billItemsText += `• ${cart[id].name} x ${cart[id].qty} = ₹${sub}\n`;
+      let item = cart[id];
+      if (!itemsMap[item.shop]) itemsMap[item.shop] = [];
+      itemsMap[item.shop].push(item);
+      subTotal += item.price * item.qty;
     }
 
-    let isFreeDelivery = foodTotal >= FREE_DELIVERY_THRESHOLD;
-    let deliveryFee = isFreeDelivery ? 0 : BASE_DELIVERY_FEE;
-    let grandTotal = foodTotal + deliveryFee;
+    let orderList = "";
+    for (let s in itemsMap) {
+      orderList += `\n📍 *${s}*\n`;
+      itemsMap[s].forEach(i => {
+        orderList += `  • ${i.name} [x${i.qty}] = ₹${i.price * i.qty}\n`;
+      });
+    }
 
-    let rawMessage = `*--- NEW ORDER DISPATCH ---*\n` +
-                     `*Outlet:* ${shopName}\n\n` +
-                     `*ORDER SUMMARY:*\n${billItemsText}\n` +
-                     `*Item Total:* ₹${foodTotal}\n` +
-                     `*Delivery Fee:* ${isFreeDelivery ? "FREE (Offer Applied)" : "₹" + BASE_DELIVERY_FEE}\n` +
-                     `*Total Payable:* ₹${grandTotal}\n` +
-                     `*Payment Mode:* ${payMode}\n\n` +
-                     `*CUSTOMER DETAILS:*\n` +
-                     `• Name: ${name}\n` +
-                     `• Contact: ${phone}\n` +
-                     `• Address: ${addr}\n` +
-                     `-----------------------------------`;
+    let del = subTotal >= 199 ? 0 : 20;
+    let grand = subTotal + del;
 
-    const encodedMsg = encodeURIComponent(rawMessage);
-    window.open(`https://api.whatsapp.com/send?phone=${MY_DELIVERY_WHATSAPP}&text=${encodedMsg}`, '_blank');
+    let msg = `*⚡ NEW FOOD DROP: PHULERA EATS ⚡*\n` +
+              `*Gang Member:* ${name} (${phone})\n` +
+              `*Drop Location:* ${addr}\n` +
+              `-------------------------------------\n` +
+              `*ITEMS ORDERED:*` +
+              orderList +
+              `-------------------------------------\n` +
+              `*Subtotal:* ₹${subTotal}\n` +
+              `*Delivery:* ${del === 0 ? "FREE (Secured)" : "₹" + del}\n` +
+              `*TOTAL TO PAY:* ₹${grand}\n` +
+              `*Payment Option:* ${pay}\n\n` +
+              `🚀 *Status:* Drop the order ASAP!`;
+
+    window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`, '_blank');
   }
 
   renderMenu();
 </script>
 </body>
 </html>
+
