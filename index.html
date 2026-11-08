@@ -394,7 +394,7 @@
 
   <div class="header">
     <h1>🏠 RENT & SUB-METER PORTAL</h1>
-    <p>Submeter Proof, Original PhonePe & Cloud Sync</p>
+    <p>Submeter Proof, Direct UPI & Cloud Sync</p>
   </div>
 
   <div class="card" id="mainCard">
@@ -499,8 +499,8 @@
       <img src="fc49f066-a479-4a5a-9a9c-97528deb8319.jpeg" onerror="this.src='qr.png'" class="qr-img" alt="PhonePe QR">
       <div class="qr-info">
         <strong>PhonePe Verified Merchant QR</strong>
-        <span>Account: NAND LAL KUMAWAT</span><br>
-        <span style="color:var(--accent);">UPI ID: 9828551400@ybl</span>
+        <span>Account: NAND LAL KUMAWAT (SBI)</span><br>
+        <span style="color:var(--accent);">UPI ID: 9413159195@ybl</span>
       </div>
     </div>
 
@@ -884,6 +884,9 @@
   }
 
   function buildAndOpenWhatsApp(period, tenant, prev, curr, units, rate, elecTotal, rent, extra, grandTotal, phone) {
+    // Direct tap-to-pay link (Opens PhonePe / GPay / Paytm automatically)
+    const directPayLink = `https://upiqr.in/pay/9413159195@ybl?am=${grandTotal}`;
+
     const message = 
 `*RENT & ELECTRICITY BILL - ${period.toUpperCase()}* 🏠
 --------------------------------
@@ -902,10 +905,14 @@ Billing details for *${period}*:
 ${extra > 0 ? `➕ *Extra / Other:* ₹${extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
 💰 *TOTAL PAYABLE: ₹${grandTotal.toLocaleString('en-IN')}*
 --------------------------------
-📱 *Pay via PhonePe / GPay / Paytm:*
+👉 *Direct Pay Link (Tap to Open PhonePe / GPay):*
+${directPayLink}
+
+📱 *Bank / UPI Details:*
 Name: *NAND LAL KUMAWAT*
-UPI ID: *9828551400@ybl*
-Number: *9828551400*
+Bank: *State Bank of India (SBI)*
+UPI ID: *9413159195@ybl*
+Number: *9413159195*
 
 _Note: Sub-meter photo proof has been logged in the system. Thank you!_`;
 
