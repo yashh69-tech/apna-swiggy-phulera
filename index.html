@@ -23,6 +23,7 @@
     --sub: #94a3b8;
     --danger: #ef4444;
     --input-bg: #0b1120;
+    --btn-secondary: #1e293b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -34,7 +35,7 @@
   }
 
   .container {
-    max-width: 600px;
+    max-width: 620px;
     margin: 0 auto;
   }
 
@@ -210,7 +211,7 @@
   }
   .img-preview {
     width: 100%;
-    max-height: 110px;
+    max-height: 120px;
     object-fit: cover;
     border-radius: 6px;
     border: 1px solid var(--border);
@@ -302,12 +303,59 @@
   .btn-cloud:hover { background: var(--accent-hover); }
   .btn-print { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
+  /* Table styling */
   .table-box { overflow-x: auto; margin-top: 10px; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
-  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 580px; }
+  th, td { padding: 9px 8px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
   th { color: var(--sub); font-weight: 700; }
-  .btn-del { background: transparent; border: none; color: var(--danger); font-size: 14px; cursor: pointer; font-weight: bold; }
-  .thumb-icon { width: 28px; height: 28px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; }
+  
+  .action-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-tbl-action {
+    background: #1c2742;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .btn-tbl-action:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-tbl-wa {
+    background: rgba(37, 211, 102, 0.15);
+    border: 1px solid var(--wa);
+    color: var(--wa);
+  }
+  .btn-tbl-wa:hover {
+    background: var(--wa);
+    color: #fff;
+  }
+  .btn-del {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+  }
+
+  .thumb-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    margin-right: 3px;
+  }
 
   @media print {
     body { background: #fff; color: #000; padding: 0; }
@@ -347,7 +395,7 @@
 
   <div class="header">
     <h1>🏠 RENT & SUB-METER PORTAL</h1>
-    <p>Submeter Proof, UPI Payment & Cloud Sync</p>
+    <p>Submeter Proof, Direct UPI & Cloud Sync</p>
   </div>
 
   <div class="card" id="mainCard">
@@ -447,13 +495,13 @@
       </div>
     </div>
 
-    <!-- PhonePe Payment QR Integration -->
+    <!-- Clean PhonePe QR Code (Without Amount Lock to Prevent NPCI Scan Errors) -->
     <div class="qr-section">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26cu=INR" class="qr-img" alt="PhonePe QR" id="payQrImg">
       <div class="qr-info">
-        <strong>PhonePe UPI QR Attached</strong>
+        <strong>PhonePe UPI QR (Clean Link)</strong>
         <span>Receiver: NAND LAL KUMAWAT</span><br>
-        <span style="color:var(--accent);">Scan to pay rent & electricity bill</span>
+        <span style="color:var(--accent);">Scan via PhonePe, GPay, or Paytm</span>
       </div>
     </div>
 
@@ -462,7 +510,7 @@
         <span>☁️ Save to Cloud Database</span>
       </button>
       <button class="btn btn-wa" onclick="sendWhatsApp()">
-        <span>📲 Share Bill on WhatsApp</span>
+        <span>📲 Share Current Bill on WhatsApp</span>
       </button>
       <button class="btn btn-print" onclick="window.print()">
         <span>🖨️ Print / Save PDF Receipt</span>
@@ -485,7 +533,7 @@
             <th>Units</th>
             <th>Proof</th>
             <th>Total</th>
-            <th>Action</th>
+            <th style="min-width:140px;">Actions</th>
           </tr>
         </thead>
         <tbody id="historyBody"></tbody>
@@ -516,6 +564,7 @@
 
   let prevPhotoData = "";
   let currPhotoData = "";
+  let cachedRecords = {};
 
   function toggleAuthMode() {
     isSignUpMode = !isSignUpMode;
@@ -636,9 +685,6 @@
 
     document.getElementById('lblTotal').textContent = "₹" + grandTotal.toLocaleString('en-IN');
 
-    const dynamicUpi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26am=${grandTotal}%26cu=INR`;
-    document.getElementById('payQrImg').src = dynamicUpi;
-
     return { prev, curr, rate, units, elecTotal, rent, extra, grandTotal };
   }
 
@@ -679,7 +725,7 @@
     db.collection('userTrackers').doc(`${currentUser.uid}_tenant_${year}_${month}`).set(record)
       .then(() => {
         document.getElementById('cloudStatus').textContent = "● Synced & Online";
-        alert(`Bill for ${month} ${year} saved successfully with meter proof!`);
+        alert(`Bill for ${month} ${year} saved successfully!`);
         document.getElementById('prevReading').value = data.curr;
         document.getElementById('currReading').value = "";
         
@@ -705,7 +751,13 @@
         tbody.innerHTML = '';
         
         let docs = [];
-        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+        cachedRecords = {};
+
+        snapshot.forEach(doc => {
+          const item = { id: doc.id, ...doc.data() };
+          docs.push(item);
+          cachedRecords[doc.id] = item;
+        });
 
         docs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
         document.getElementById('recordCount').textContent = `${docs.length} Bills Saved`;
@@ -725,7 +777,7 @@
           const proofThumbs = `
             ${item.prevPhoto ? `<img src="${item.prevPhoto}" class="thumb-icon" title="Old Meter" onclick="window.open('${item.prevPhoto}')">` : ''}
             ${item.currPhoto ? `<img src="${item.currPhoto}" class="thumb-icon" title="New Meter" onclick="window.open('${item.currPhoto}')">` : ''}
-            ${!item.prevPhoto && !item.currPhoto ? '<span style="color:var(--sub);">No photo</span>' : ''}
+            ${!item.prevPhoto && !item.currPhoto ? '<span style="color:var(--sub);">-</span>' : ''}
           `;
 
           tr.innerHTML = `
@@ -734,11 +786,56 @@
             <td>${item.units} u</td>
             <td>${proofThumbs}</td>
             <td style="color:var(--accent); font-weight:bold;">₹${item.grandTotal.toLocaleString('en-IN')}</td>
-            <td><button class="btn-del" onclick="deleteCloudRecord('${item.id}')">✕</button></td>
+            <td>
+              <div class="action-btn-group">
+                <button class="btn-tbl-action" onclick="viewOldRecord('${item.id}')" title="Load in Form">👁️ View</button>
+                <button class="btn-tbl-action btn-tbl-wa" onclick="sendOldBillWhatsApp('${item.id}')" title="Resend on WhatsApp">📲 Send</button>
+                <button class="btn-del" onclick="deleteCloudRecord('${item.id}')" title="Delete">✕</button>
+              </div>
+            </td>
           `;
           tbody.appendChild(tr);
         });
       });
+  }
+
+  // Load old bill directly into main card
+  function viewOldRecord(docId) {
+    const item = cachedRecords[docId];
+    if (!item) return;
+
+    if (item.month) document.getElementById('billMonth').value = item.month;
+    if (item.year) document.getElementById('billYear').value = item.year;
+    if (item.tenantName) document.getElementById('tenantName').value = item.tenantName;
+    document.getElementById('prevReading').value = item.prevReading || 0;
+    document.getElementById('currReading').value = item.currReading || 0;
+    document.getElementById('unitRate').value = item.rate || 8.5;
+    document.getElementById('baseRent').value = item.baseRent || 0;
+    document.getElementById('extraCharge').value = item.extraCharge || 0;
+
+    // Load photo previews if present
+    const prevEl = document.getElementById('prevImgPreview');
+    if (item.prevPhoto) {
+      prevEl.src = item.prevPhoto;
+      prevEl.style.display = 'block';
+      prevPhotoData = item.prevPhoto;
+    } else {
+      prevEl.style.display = 'none';
+      prevPhotoData = "";
+    }
+
+    const currEl = document.getElementById('currImgPreview');
+    if (item.currPhoto) {
+      currEl.src = item.currPhoto;
+      currEl.style.display = 'block';
+      currPhotoData = item.currPhoto;
+    } else {
+      currEl.style.display = 'none';
+      currPhotoData = "";
+    }
+
+    calcTotal();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function deleteCloudRecord(docId) {
@@ -747,6 +844,28 @@
     }
   }
 
+  // Resend any saved old bill to WhatsApp
+  function sendOldBillWhatsApp(docId) {
+    const item = cachedRecords[docId];
+    if (!item) return;
+
+    const phone = document.getElementById('tenantPhone').value.trim();
+    buildAndOpenWhatsApp(
+      item.periodLabel,
+      item.tenantName || "Tenant",
+      item.prevReading,
+      item.currReading,
+      item.units,
+      item.rate,
+      item.elecTotal,
+      item.baseRent,
+      item.extraCharge,
+      item.grandTotal,
+      phone
+    );
+  }
+
+  // Send currently calculated bill
   function sendWhatsApp() {
     const data = calcTotal();
     const month = document.getElementById('billMonth').value;
@@ -754,26 +873,43 @@
     const tenant = document.getElementById('tenantName').value || "Tenant";
     const phone = document.getElementById('tenantPhone').value.trim();
 
-    const upiLink = `upi://pay?pa=9828551400@ybl&pn=NAND%20LAL%20KUMAWAT&am=${data.grandTotal}&cu=INR`;
-    const qrWebLink = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(upiLink)}`;
+    buildAndOpenWhatsApp(
+      `${month} ${year}`,
+      tenant,
+      data.prev,
+      data.curr,
+      data.units,
+      data.rate,
+      data.elecTotal,
+      data.rent,
+      data.extra,
+      data.grandTotal,
+      phone
+    );
+  }
+
+  // Formatter for clean WhatsApp invoice delivery
+  function buildAndOpenWhatsApp(period, tenant, prev, curr, units, rate, elecTotal, rent, extra, grandTotal, phone) {
+    // Clean UPI QR URL without amount restriction to prevent PhonePe app errors
+    const qrWebLink = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26cu=INR`;
 
     const message = 
-`*RENT & ELECTRICITY BILL - ${month.toUpperCase()} ${year}* 🏠
+`*RENT & ELECTRICITY BILL - ${period.toUpperCase()}* 🏠
 --------------------------------
 Hello *${tenant}*,
 
-Here are the billing details for *${month} ${year}*:
+Here are the billing details for *${period}*:
 
 ⚡ *Submeter Electricity:*
-• Previous Reading: ${data.prev}
-• Current Reading: ${data.curr}
-• Units Consumed: *${data.units} units*
-• Rate per Unit: ₹${data.rate}
-• Electricity Amount: *₹${data.elecTotal.toLocaleString('en-IN')}*
+• Previous Reading: ${prev}
+• Current Reading: ${curr}
+• Units Consumed: *${units} units*
+• Rate per Unit: ₹${rate}
+• Electricity Amount: *₹${elecTotal.toLocaleString('en-IN')}*
 
-🏠 *Room Rent:* ₹${data.rent.toLocaleString('en-IN')}
-${data.extra > 0 ? `➕ *Extra / Other:* ₹${data.extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
-💰 *TOTAL PAYABLE: ₹${data.grandTotal.toLocaleString('en-IN')}*
+🏠 *Room Rent:* ₹${rent.toLocaleString('en-IN')}
+${extra > 0 ? `➕ *Extra / Other:* ₹${extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
+💰 *TOTAL PAYABLE: ₹${grandTotal.toLocaleString('en-IN')}*
 --------------------------------
 📱 *Pay via PhonePe / UPI:*
 Name: *NAND LAL KUMAWAT*
