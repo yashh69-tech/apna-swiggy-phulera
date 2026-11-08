@@ -23,7 +23,6 @@
     --sub: #94a3b8;
     --danger: #ef4444;
     --input-bg: #0b1120;
-    --btn-secondary: #1e293b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -243,7 +242,7 @@
     color: var(--accent);
   }
 
-  /* Embedded QR Section */
+  /* Original PhonePe QR Section */
   .qr-section {
     display: flex;
     align-items: center;
@@ -251,16 +250,16 @@
     background: #090d16;
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 10px 14px;
-    margin-top: 12px;
+    padding: 12px 14px;
+    margin-top: 14px;
   }
   .qr-img {
-    width: 72px;
-    height: 72px;
+    width: 85px;
+    height: 85px;
     border-radius: 6px;
-    border: 1px solid #fff;
+    object-fit: contain;
     background: #fff;
-    padding: 2px;
+    padding: 3px;
   }
   .qr-info {
     font-size: 12px;
@@ -268,7 +267,7 @@
   .qr-info strong {
     color: var(--text);
     display: block;
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 2px;
   }
   .qr-info span {
@@ -395,7 +394,7 @@
 
   <div class="header">
     <h1>🏠 RENT & SUB-METER PORTAL</h1>
-    <p>Submeter Proof, Direct UPI & Cloud Sync</p>
+    <p>Submeter Proof, Original PhonePe & Cloud Sync</p>
   </div>
 
   <div class="card" id="mainCard">
@@ -495,13 +494,13 @@
       </div>
     </div>
 
-    <!-- Clean PhonePe QR Code (Without Amount Lock to Prevent NPCI Scan Errors) -->
+    <!-- Direct Original PhonePe QR Code -->
     <div class="qr-section">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26cu=INR" class="qr-img" alt="PhonePe QR" id="payQrImg">
+      <img src="fc49f066-a479-4a5a-9a9c-97528deb8319.jpeg" onerror="this.src='qr.png'" class="qr-img" alt="PhonePe QR">
       <div class="qr-info">
-        <strong>PhonePe UPI QR (Clean Link)</strong>
-        <span>Receiver: NAND LAL KUMAWAT</span><br>
-        <span style="color:var(--accent);">Scan via PhonePe, GPay, or Paytm</span>
+        <strong>PhonePe Verified Merchant QR</strong>
+        <span>Account: NAND LAL KUMAWAT</span><br>
+        <span style="color:var(--accent);">UPI ID: 9828551400@ybl</span>
       </div>
     </div>
 
@@ -799,7 +798,6 @@
       });
   }
 
-  // Load old bill directly into main card
   function viewOldRecord(docId) {
     const item = cachedRecords[docId];
     if (!item) return;
@@ -813,7 +811,6 @@
     document.getElementById('baseRent').value = item.baseRent || 0;
     document.getElementById('extraCharge').value = item.extraCharge || 0;
 
-    // Load photo previews if present
     const prevEl = document.getElementById('prevImgPreview');
     if (item.prevPhoto) {
       prevEl.src = item.prevPhoto;
@@ -844,7 +841,6 @@
     }
   }
 
-  // Resend any saved old bill to WhatsApp
   function sendOldBillWhatsApp(docId) {
     const item = cachedRecords[docId];
     if (!item) return;
@@ -865,7 +861,6 @@
     );
   }
 
-  // Send currently calculated bill
   function sendWhatsApp() {
     const data = calcTotal();
     const month = document.getElementById('billMonth').value;
@@ -888,17 +883,13 @@
     );
   }
 
-  // Formatter for clean WhatsApp invoice delivery
   function buildAndOpenWhatsApp(period, tenant, prev, curr, units, rate, elecTotal, rent, extra, grandTotal, phone) {
-    // Clean UPI QR URL without amount restriction to prevent PhonePe app errors
-    const qrWebLink = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26cu=INR`;
-
     const message = 
 `*RENT & ELECTRICITY BILL - ${period.toUpperCase()}* 🏠
 --------------------------------
 Hello *${tenant}*,
 
-Here are the billing details for *${period}*:
+Billing details for *${period}*:
 
 ⚡ *Submeter Electricity:*
 • Previous Reading: ${prev}
@@ -911,12 +902,10 @@ Here are the billing details for *${period}*:
 ${extra > 0 ? `➕ *Extra / Other:* ₹${extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
 💰 *TOTAL PAYABLE: ₹${grandTotal.toLocaleString('en-IN')}*
 --------------------------------
-📱 *Pay via PhonePe / UPI:*
+📱 *Pay via PhonePe / GPay / Paytm:*
 Name: *NAND LAL KUMAWAT*
 UPI ID: *9828551400@ybl*
-
-Scan or open QR to pay:
-${qrWebLink}
+Number: *9828551400*
 
 _Note: Sub-meter photo proof has been logged in the system. Thank you!_`;
 
