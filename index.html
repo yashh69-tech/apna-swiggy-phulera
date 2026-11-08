@@ -3,19 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2nd Floor - Rent & Electricity Calculator</title>
+<title>2nd Floor - Rent, Meter Proof & Cloud Billing</title>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
   :root {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --border: #334155;
+    --bg: #090d16;
+    --card: #131b2e;
+    --border: #263352;
     --accent: #10b981;
     --accent-hover: #059669;
     --wa: #25d366;
     --wa-hover: #1eb956;
-    --text: #f8fafc;
+    --text: #f1f5f9;
     --sub: #94a3b8;
     --danger: #ef4444;
+    --input-bg: #0b1120;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -29,6 +36,79 @@
   .container {
     max-width: 600px;
     margin: 0 auto;
+  }
+
+  /* Auth Modal */
+  #authModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 13, 22, 0.95);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .auth-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+  .auth-card h2 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+  .auth-card p { font-size: 12px; color: var(--sub); margin-bottom: 16px; }
+  .auth-card input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  .btn-auth {
+    width: 100%;
+    padding: 11px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .toggle-auth {
+    font-size: 12px;
+    color: var(--sub);
+    margin-top: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+  .sync-badge {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .btn-logout {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--sub);
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
   }
 
   .header {
@@ -55,7 +135,7 @@
     border-radius: 12px;
     padding: 18px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   }
 
   .form-grid {
@@ -79,7 +159,7 @@
   input, select {
     width: 100%;
     padding: 10px 12px;
-    background: #090d16;
+    background: var(--input-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
     color: var(--text);
@@ -91,9 +171,56 @@
     border-color: var(--accent);
   }
 
+  /* Photo Proof Upload Box */
+  .photo-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .upload-btn-wrap {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+  }
+  .btn-upload {
+    width: 100%;
+    padding: 8px 10px;
+    background: #1c2742;
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .upload-btn-wrap input[type=file] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+  }
+  .img-preview {
+    width: 100%;
+    max-height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    margin-top: 4px;
+    display: none;
+  }
+
   /* Live Summary Box */
   .summary-box {
-    background: #090d16;
+    background: var(--input-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 14px;
@@ -106,10 +233,6 @@
     color: var(--sub);
     margin-bottom: 8px;
   }
-  .summary-row.bold {
-    color: var(--text);
-    font-weight: 700;
-  }
   .summary-row.total {
     border-top: 1px dashed var(--border);
     padding-top: 10px;
@@ -119,7 +242,40 @@
     color: var(--accent);
   }
 
-  /* Action Buttons */
+  /* Embedded QR Section */
+  .qr-section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #090d16;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+  }
+  .qr-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 6px;
+    border: 1px solid #fff;
+    background: #fff;
+    padding: 2px;
+  }
+  .qr-info {
+    font-size: 12px;
+  }
+  .qr-info strong {
+    color: var(--text);
+    display: block;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+  .qr-info span {
+    color: var(--sub);
+    font-size: 11px;
+  }
+
+  /* Buttons */
   .btn-group {
     display: flex;
     flex-direction: column;
@@ -138,97 +294,63 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.2s;
   }
-  .btn:active {
-    transform: scale(0.98);
-  }
-  .btn-wa {
-    background: var(--wa);
-    color: #fff;
-  }
-  .btn-wa:hover {
-    background: var(--wa-hover);
-  }
-  .btn-save {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-save:hover {
-    background: var(--accent-hover);
-  }
-  .btn-print {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
+  .btn:active { transform: scale(0.98); }
+  .btn-wa { background: var(--wa); color: #fff; }
+  .btn-wa:hover { background: var(--wa-hover); }
+  .btn-cloud { background: var(--accent); color: #fff; }
+  .btn-cloud:hover { background: var(--accent-hover); }
+  .btn-print { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
-  /* History Table */
-  .table-box {
-    overflow-x: auto;
-    margin-top: 10px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    min-width: 450px;
-  }
-  th, td {
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  th {
-    color: var(--sub);
-    font-weight: 700;
-  }
-  .btn-del {
-    background: transparent;
-    border: none;
-    color: var(--danger);
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: bold;
-  }
+  .table-box { overflow-x: auto; margin-top: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  th { color: var(--sub); font-weight: 700; }
+  .btn-del { background: transparent; border: none; color: var(--danger); font-size: 14px; cursor: pointer; font-weight: bold; }
+  .thumb-icon { width: 28px; height: 28px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; }
 
-  /* Print Receipt Styling */
   @media print {
-    body {
-      background: #fff;
-      color: #000;
-      padding: 0;
-    }
-    .header, .btn-group, .card:not(#receiptCard), .history-section {
-      display: none !important;
-    }
-    #receiptCard {
-      background: #fff !important;
-      color: #000 !important;
-      border: 1px solid #000 !important;
-      box-shadow: none !important;
-      max-width: 100%;
-    }
-    .summary-box {
-      background: #f8fafc !important;
-      border: 1px solid #ccc !important;
-    }
-    .summary-row, .summary-row.bold, .summary-row.total {
-      color: #000 !important;
-    }
+    body { background: #fff; color: #000; padding: 0; }
+    .header, .top-bar, .btn-group, .history-section, #authModal, .upload-btn-wrap { display: none !important; }
+    .card { background: #fff !important; color: #000 !important; border: 1px solid #000 !important; box-shadow: none !important; }
+    .summary-box { background: #f8fafc !important; border: 1px solid #ccc !important; }
+    .summary-row, .summary-row.total { color: #000 !important; }
+    .qr-section { background: #fff !important; border: 1px solid #ccc !important; }
+    .qr-info strong, .qr-info span { color: #000 !important; }
   }
 </style>
 </head>
 <body>
 
+<!-- Login Modal -->
+<div id="authModal">
+  <div class="auth-card">
+    <h2 id="authHeading">PORTAL LOGIN</h2>
+    <p id="authSub">Sign in to sync meter records across all devices</p>
+    <input type="email" id="authEmail" placeholder="Your Email">
+    <input type="password" id="authPassword" placeholder="Password (Min 6 chars)">
+    <button class="btn-auth" id="authBtn" onclick="handleAuth()">LOGIN</button>
+    <div class="toggle-auth" id="authToggle" onclick="toggleAuthMode()">First time? Sign Up here</div>
+    <div id="authError" style="color:#ef4444; font-size:11px; margin-top:10px;"></div>
+  </div>
+</div>
+
 <div class="container">
   
-  <div class="header">
-    <h1>🏠 2nd FLOOR RENT & ELECTRICITY</h1>
-    <p>Monthly Calculation & WhatsApp Receipt Generator</p>
+  <div class="top-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="sync-badge" id="cloudStatus">● Connecting...</span>
+      <button class="btn-logout" onclick="logoutUser()">Logout</button>
+    </div>
+    <span style="color:var(--sub);" id="userTag"></span>
   </div>
 
-  <div class="card" id="receiptCard">
+  <div class="header">
+    <h1>🏠 RENT & SUB-METER PORTAL</h1>
+    <p>Submeter Proof, UPI Payment & Cloud Sync</p>
+  </div>
+
+  <div class="card" id="mainCard">
     <div class="form-grid">
       <div>
         <label>Billing Month</label>
@@ -249,18 +371,40 @@
       </div>
 
       <div>
-        <label>Tenant Name / Room</label>
-        <input type="text" id="tenantName" value="2nd Floor Family" placeholder="Tenant Name">
+        <label>Billing Year</label>
+        <select id="billYear" onchange="calcTotal()"></select>
       </div>
 
       <div>
+        <label>Tenant Name</label>
+        <input type="text" id="tenantName" value="2nd Floor Family">
+      </div>
+
+      <div>
+        <label>Tenant WhatsApp No.</label>
+        <input type="tel" id="tenantPhone" placeholder="91XXXXXXXXXX">
+      </div>
+
+      <!-- Previous Reading & Photo (Gallery + Camera) -->
+      <div class="photo-field">
         <label>Previous Reading (Old)</label>
         <input type="number" id="prevReading" placeholder="e.g. 1200" oninput="calcTotal()">
+        <div class="upload-btn-wrap">
+          <button type="button" class="btn-upload">📷 Gallery / Camera Proof</button>
+          <input type="file" accept="image/*" id="prevPhotoInput" onchange="previewImage(this, 'prevImgPreview')">
+        </div>
+        <img id="prevImgPreview" class="img-preview" alt="Old Meter Preview">
       </div>
 
-      <div>
+      <!-- Current Reading & Photo (Gallery + Camera) -->
+      <div class="photo-field">
         <label>Current Reading (New)</label>
         <input type="number" id="currReading" placeholder="e.g. 1320" oninput="calcTotal()">
+        <div class="upload-btn-wrap">
+          <button type="button" class="btn-upload">📷 Gallery / Camera Proof</button>
+          <input type="file" accept="image/*" id="currPhotoInput" onchange="previewImage(this, 'currImgPreview')">
+        </div>
+        <img id="currImgPreview" class="img-preview" alt="Current Meter Preview">
       </div>
 
       <div>
@@ -270,17 +414,12 @@
 
       <div>
         <label>Monthly Room Rent (₹)</label>
-        <input type="number" id="baseRent" value="6000" placeholder="Rent Amount" oninput="calcTotal()">
+        <input type="number" id="baseRent" value="6000" oninput="calcTotal()">
       </div>
 
       <div class="full-width">
         <label>Extra / Water Charge (₹)</label>
-        <input type="number" id="extraCharge" value="0" placeholder="Optional charge" oninput="calcTotal()">
-      </div>
-
-      <div class="full-width">
-        <label>Tenant WhatsApp Number (Optional)</label>
-        <input type="tel" id="tenantPhone" placeholder="91XXXXXXXXXX (Direct Chat ke liye)">
+        <input type="number" id="extraCharge" value="0" oninput="calcTotal()">
       </div>
     </div>
 
@@ -308,37 +447,48 @@
       </div>
     </div>
 
+    <!-- PhonePe Payment QR Integration -->
+    <div class="qr-section">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26cu=INR" class="qr-img" alt="PhonePe QR" id="payQrImg">
+      <div class="qr-info">
+        <strong>PhonePe UPI QR Attached</strong>
+        <span>Receiver: NAND LAL KUMAWAT</span><br>
+        <span style="color:var(--accent);">Scan to pay rent & electricity bill</span>
+      </div>
+    </div>
+
     <div class="btn-group">
+      <button class="btn btn-cloud" onclick="saveToCloud()">
+        <span>☁️ Save to Cloud Database</span>
+      </button>
       <button class="btn btn-wa" onclick="sendWhatsApp()">
         <span>📲 Share Bill on WhatsApp</span>
       </button>
-      <button class="btn btn-save" onclick="saveRecord()">
-        <span>💾 Save This Month Record</span>
-      </button>
       <button class="btn btn-print" onclick="window.print()">
-        <span>🖨️ Print / Download Slip</span>
+        <span>🖨️ Print / Save PDF Receipt</span>
       </button>
     </div>
   </div>
 
-  <!-- History Section -->
+  <!-- Realtime History Table -->
   <div class="card history-section">
-    <label>Saved Records History</label>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <label>Saved Bills History</label>
+      <span style="font-size:11px; color:var(--sub);" id="recordCount">0 Bills</span>
+    </div>
     <div class="table-box">
       <table>
         <thead>
           <tr>
-            <th>Month</th>
+            <th>Period</th>
             <th>Readings</th>
             <th>Units</th>
-            <th>Elec. Bill</th>
+            <th>Proof</th>
             <th>Total</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="historyBody">
-          <!-- Populated from LocalStorage -->
-        </tbody>
+        <tbody id="historyBody"></tbody>
       </table>
     </div>
   </div>
@@ -346,9 +496,116 @@
 </div>
 
 <script>
-  // Set current month automatically
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTi4NRid5Yc72ATBfxg995GAWg1fUOBNs",
+    authDomain: "winter-arc-tracker-6544e.firebaseapp.com",
+    projectId: "winter-arc-tracker-6544e",
+    storageBucket: "winter-arc-tracker-6544e.firebasestorage.app",
+    messagingSenderId: "1076175486940",
+    appId: "1:1076175486940:web:1e3cb601ab0e71806a1919",
+    measurementId: "G-P63QXDBSQD"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  let currentUser = null;
+  let isSignUpMode = false;
+  let unsubscribeListener = null;
+
+  let prevPhotoData = "";
+  let currPhotoData = "";
+
+  function toggleAuthMode() {
+    isSignUpMode = !isSignUpMode;
+    document.getElementById('authHeading').textContent = isSignUpMode ? "CREATE ACCOUNT" : "PORTAL LOGIN";
+    document.getElementById('authBtn').textContent = isSignUpMode ? "SIGN UP & START" : "LOGIN";
+    document.getElementById('authToggle').textContent = isSignUpMode ? "Already have account? Login" : "First time? Sign Up here";
+    document.getElementById('authError').textContent = "";
+  }
+
+  function handleAuth() {
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPassword').value;
+    const errDiv = document.getElementById('authError');
+    errDiv.textContent = "";
+
+    if(!email || !pass) { errDiv.textContent = "Please enter email and password."; return; }
+
+    if (isSignUpMode) {
+      auth.createUserWithEmailAndPassword(email, pass).catch(err => errDiv.textContent = err.message);
+    } else {
+      auth.signInWithEmailAndPassword(email, pass).catch(err => errDiv.textContent = err.message);
+    }
+  }
+
+  function logoutUser() {
+    if(unsubscribeListener) unsubscribeListener();
+    auth.signOut();
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      currentUser = user;
+      document.getElementById('authModal').style.display = 'none';
+      document.getElementById('cloudStatus').textContent = "● Synced & Online";
+      document.getElementById('userTag').textContent = user.email.split('@')[0];
+      listenToCloudRecords();
+    } else {
+      currentUser = null;
+      document.getElementById('authModal').style.display = 'flex';
+      document.getElementById('cloudStatus').textContent = "● Not Logged In";
+      document.getElementById('userTag').textContent = "";
+      document.getElementById('historyBody').innerHTML = '';
+    }
+  });
+
+  const yearSelect = document.getElementById('billYear');
+  for (let y = 2025; y <= 2035; y++) {
+    let opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    yearSelect.appendChild(opt);
+  }
+  yearSelect.value = new Date().getFullYear();
+
   const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   document.getElementById('billMonth').value = months[new Date().getMonth()];
+
+  function previewImage(input, previewElementId) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 800;
+          let w = img.width;
+          let h = img.height;
+          if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; }
+          else if (h > maxDim) { w *= maxDim / h; h = maxDim; }
+
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.65);
+          const previewEl = document.getElementById(previewElementId);
+          previewEl.src = compressedBase64;
+          previewEl.style.display = 'block';
+
+          if (previewElementId === 'prevImgPreview') prevPhotoData = compressedBase64;
+          if (previewElementId === 'currImgPreview') currPhotoData = compressedBase64;
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   function calcTotal() {
     const prev = parseFloat(document.getElementById('prevReading').value) || 0;
@@ -379,34 +636,153 @@
 
     document.getElementById('lblTotal').textContent = "₹" + grandTotal.toLocaleString('en-IN');
 
+    const dynamicUpi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9828551400@ybl%26pn=NAND%20LAL%20KUMAWAT%26am=${grandTotal}%26cu=INR`;
+    document.getElementById('payQrImg').src = dynamicUpi;
+
     return { prev, curr, rate, units, elecTotal, rent, extra, grandTotal };
+  }
+
+  function saveToCloud() {
+    if (!currentUser) return alert("Pehle login karein!");
+
+    const data = calcTotal();
+    const month = document.getElementById('billMonth').value;
+    const year = document.getElementById('billYear').value;
+    const tenant = document.getElementById('tenantName').value;
+
+    if (!data.curr || data.curr <= 0) {
+      alert("Please enter current meter reading!");
+      return;
+    }
+
+    document.getElementById('cloudStatus').textContent = "● Saving to Cloud...";
+
+    const record = {
+      userId: currentUser.uid,
+      tenantName: tenant,
+      month: month,
+      year: year,
+      periodLabel: `${month} ${year}`,
+      prevReading: data.prev,
+      currReading: data.curr,
+      prevPhoto: prevPhotoData || "",
+      currPhoto: currPhotoData || "",
+      rate: data.rate,
+      units: data.units,
+      elecTotal: data.elecTotal,
+      baseRent: data.rent,
+      extraCharge: data.extra,
+      grandTotal: data.grandTotal,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    db.collection('userTrackers').doc(`${currentUser.uid}_tenant_${year}_${month}`).set(record)
+      .then(() => {
+        document.getElementById('cloudStatus').textContent = "● Synced & Online";
+        alert(`Bill for ${month} ${year} saved successfully with meter proof!`);
+        document.getElementById('prevReading').value = data.curr;
+        document.getElementById('currReading').value = "";
+        
+        document.getElementById('prevImgPreview').style.display = 'none';
+        document.getElementById('currImgPreview').style.display = 'none';
+        prevPhotoData = "";
+        currPhotoData = "";
+        calcTotal();
+      })
+      .catch(err => {
+        alert("Error saving: " + err.message);
+      });
+  }
+
+  function listenToCloudRecords() {
+    if (!currentUser) return;
+    if (unsubscribeListener) unsubscribeListener();
+
+    unsubscribeListener = db.collection('userTrackers')
+      .where("userId", "==", currentUser.uid)
+      .onSnapshot((snapshot) => {
+        const tbody = document.getElementById('historyBody');
+        tbody.innerHTML = '';
+        
+        let docs = [];
+        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+
+        docs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+        document.getElementById('recordCount').textContent = `${docs.length} Bills Saved`;
+
+        if (docs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--sub);">No bills saved in cloud yet.</td></tr>';
+          return;
+        }
+
+        if (!document.getElementById('prevReading').value && docs[0].currReading) {
+          document.getElementById('prevReading').value = docs[0].currReading;
+          calcTotal();
+        }
+
+        docs.forEach(item => {
+          const tr = document.createElement('tr');
+          const proofThumbs = `
+            ${item.prevPhoto ? `<img src="${item.prevPhoto}" class="thumb-icon" title="Old Meter" onclick="window.open('${item.prevPhoto}')">` : ''}
+            ${item.currPhoto ? `<img src="${item.currPhoto}" class="thumb-icon" title="New Meter" onclick="window.open('${item.currPhoto}')">` : ''}
+            ${!item.prevPhoto && !item.currPhoto ? '<span style="color:var(--sub);">No photo</span>' : ''}
+          `;
+
+          tr.innerHTML = `
+            <td><strong>${item.periodLabel}</strong></td>
+            <td>${item.prevReading} → ${item.currReading}</td>
+            <td>${item.units} u</td>
+            <td>${proofThumbs}</td>
+            <td style="color:var(--accent); font-weight:bold;">₹${item.grandTotal.toLocaleString('en-IN')}</td>
+            <td><button class="btn-del" onclick="deleteCloudRecord('${item.id}')">✕</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  }
+
+  function deleteCloudRecord(docId) {
+    if (confirm("Delete this bill record from cloud?")) {
+      db.collection('userTrackers').doc(docId).delete();
+    }
   }
 
   function sendWhatsApp() {
     const data = calcTotal();
     const month = document.getElementById('billMonth').value;
+    const year = document.getElementById('billYear').value;
     const tenant = document.getElementById('tenantName').value || "Tenant";
     const phone = document.getElementById('tenantPhone').value.trim();
 
+    const upiLink = `upi://pay?pa=9828551400@ybl&pn=NAND%20LAL%20KUMAWAT&am=${data.grandTotal}&cu=INR`;
+    const qrWebLink = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(upiLink)}`;
+
     const message = 
-`*RENT & ELECTRICITY BILL - ${month.toUpperCase()}* 🏠
+`*RENT & ELECTRICITY BILL - ${month.toUpperCase()} ${year}* 🏠
 --------------------------------
 Hello *${tenant}*,
 
-Here are the billing details for *${month}*:
+Here are the billing details for *${month} ${year}*:
 
-⚡ *Electricity Meter:*
+⚡ *Submeter Electricity:*
 • Previous Reading: ${data.prev}
 • Current Reading: ${data.curr}
-• Total Units Consumed: *${data.units} units*
+• Units Consumed: *${data.units} units*
 • Rate per Unit: ₹${data.rate}
-• Electricity Bill: *₹${data.elecTotal.toLocaleString('en-IN')}*
+• Electricity Amount: *₹${data.elecTotal.toLocaleString('en-IN')}*
 
 🏠 *Room Rent:* ₹${data.rent.toLocaleString('en-IN')}
-${data.extra > 0 ? `➕ *Extra / Other Charges:* ₹${data.extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
+${data.extra > 0 ? `➕ *Extra / Other:* ₹${data.extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
 💰 *TOTAL PAYABLE: ₹${data.grandTotal.toLocaleString('en-IN')}*
 --------------------------------
-_Please send payment via UPI / Cash once verified. Thank you!_`;
+📱 *Pay via PhonePe / UPI:*
+Name: *NAND LAL KUMAWAT*
+UPI ID: *9828551400@ybl*
+
+Scan or open QR to pay:
+${qrWebLink}
+
+_Note: Sub-meter photo proof has been logged in the system. Thank you!_`;
 
     const encodedMsg = encodeURIComponent(message);
     let waUrl = `https://wa.me/?text=${encodedMsg}`;
@@ -418,76 +794,6 @@ _Please send payment via UPI / Cash once verified. Thank you!_`;
     window.open(waUrl, '_blank');
   }
 
-  function saveRecord() {
-    const data = calcTotal();
-    const month = document.getElementById('billMonth').value;
-    const year = new Date().getFullYear();
-
-    const record = {
-      id: Date.now(),
-      month: `${month} ${year}`,
-      readings: `${data.prev} → ${data.curr}`,
-      units: data.units,
-      elec: data.elecTotal,
-      total: data.grandTotal
-    };
-
-    let history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
-    history.unshift(record);
-    localStorage.setItem('tenant_bill_records', JSON.stringify(history));
-
-    // Next time previous reading automatically becomes this month current
-    if (data.curr > 0) {
-      document.getElementById('prevReading').value = data.curr;
-      document.getElementById('currReading').value = "";
-    }
-
-    renderHistory();
-    alert("Record successfully saved!");
-  }
-
-  function deleteRecord(id) {
-    let history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
-    history = history.filter(item => item.id !== id);
-    localStorage.setItem('tenant_bill_records', JSON.stringify(history));
-    renderHistory();
-  }
-
-  function renderHistory() {
-    const history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
-    const tbody = document.getElementById('historyBody');
-    tbody.innerHTML = '';
-
-    if (history.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--sub);">No previous records saved yet.</td></tr>';
-      return;
-    }
-
-    history.forEach(item => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><strong>${item.month}</strong></td>
-        <td>${item.readings}</td>
-        <td>${item.units} u</td>
-        <td>₹${item.elec.toLocaleString('en-IN')}</td>
-        <td style="color:var(--accent); font-weight:bold;">₹${item.total.toLocaleString('en-IN')}</td>
-        <td><button class="btn-del" onclick="deleteRecord(${item.id})">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Auto set previous reading from latest record if field is empty
-    if (history.length > 0 && !document.getElementById('prevReading').value) {
-      const lastReading = history[0].readings.split('→')[1];
-      if (lastReading) {
-        document.getElementById('prevReading').value = lastReading.trim();
-        calcTotal();
-      }
-    }
-  }
-
-  // Initial Run
-  renderHistory();
   calcTotal();
 </script>
 </body>
