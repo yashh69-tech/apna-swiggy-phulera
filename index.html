@@ -3,509 +3,492 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phulera Eats - No Cap Food Delivery</title>
+<title>2nd Floor - Rent & Electricity Calculator</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding-bottom: 120px;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-
-  /* 🦇 GOTHAM BAT-STEALTH (Gen Z Dark) */
-  body.theme-batman {
-    --bg: #090a0f;
-    --card: #12151f;
-    --card-border: #1e2433;
-    --accent: #facc15;
-    --accent-glow: rgba(250, 204, 21, 0.25);
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --wa: #25d366;
+    --wa-hover: #1eb956;
     --text: #f8fafc;
     --sub: #94a3b8;
-    --nav: #05070a;
-    --bottom: #0e1118;
-    --tag-bg: rgba(250, 204, 21, 0.12);
+    --danger: #ef4444;
   }
 
-  /* 🎀 COQUETTE / BARBIE CORE (Gen Z Pink) */
-  body.theme-pink {
-    --bg: #fff0f5;
-    --card: #ffffff;
-    --card-border: #fbcfe8;
-    --accent: #f43f5e;
-    --accent-glow: rgba(244, 63, 94, 0.25);
-    --text: #4c0519;
-    --sub: #9f1239;
-    --nav: #ffe4ec;
-    --bottom: #ffffff;
-    --tag-bg: rgba(244, 63, 94, 0.12);
-  }
-
-  body { background: var(--bg); color: var(--text); }
-
-  /* Header */
-  header {
-    background: var(--nav);
-    border-bottom: 1px solid var(--card-border);
-    padding: 14px 18px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-main { display: flex; justify-content: space-between; align-items: center; }
-  .brand-title { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; }
-  .brand-tag { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
-
-  .cart-pill {
-    background: var(--accent);
-    color: #000;
-    padding: 6px 14px;
-    border-radius: 24px;
-    font-size: 12px;
-    font-weight: 900;
-    cursor: pointer;
-    box-shadow: 0 4px 12px var(--accent-glow);
-  }
-  body.theme-pink .cart-pill { color: #fff; }
-
-  /* Vibe Switcher */
-  .vibe-switch-bar { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
-  .vibe-btn {
-    padding: 7px 18px;
-    font-size: 12px;
-    font-weight: 800;
-    border-radius: 20px;
-    border: 1px solid var(--card-border);
-    background: var(--card);
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body {
+    background: var(--bg);
     color: var(--text);
-    cursor: pointer;
-    transition: 0.2s;
+    padding: 16px;
+    padding-bottom: 60px;
   }
-  body.theme-batman .vibe-btn.active { background: var(--accent); color: #000; }
-  body.theme-pink .vibe-btn.active { background: var(--accent); color: #fff; }
 
-  .container { max-width: 580px; margin: 0 auto; padding: 16px; }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-  /* Vibe Banners */
-  .vibe-banner {
-    background: var(--tag-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    font-size: 12px;
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 20px;
     font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--sub);
+    margin-top: 4px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .full-width {
+    grid-column: span 2;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    background: #090d16;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  /* Live Summary Box */
+  .summary-box {
+    background: #090d16;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .summary-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    font-size: 13px;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  .summary-row.bold {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .summary-row.total {
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--accent);
   }
 
-  /* Outlet Selector */
-  .outlet-box {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 14px;
-    margin-bottom: 18px;
+  /* Action Buttons */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
   }
-  .outlet-box label { font-size: 11px; font-weight: 900; color: var(--sub); display: block; margin-bottom: 8px; text-transform: uppercase; }
-  .outlet-box select {
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
     padding: 12px;
-    background: var(--bg);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    color: var(--text);
+    border: none;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 700;
-    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
   }
-
-  .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; font-weight: 900; color: var(--sub); }
-
-  /* Cards */
-  .card-item {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  .btn:active {
+    transform: scale(0.98);
   }
-  .card-item h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
-  .card-item .price { font-size: 15px; font-weight: 900; color: var(--accent); }
-  .card-item .tags { font-size: 10px; opacity: 0.7; font-weight: 700; }
-
-  .stepper {
-    display: flex;
-    align-items: center;
-    background: var(--bg);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    padding: 4px 8px;
-    gap: 8px;
+  .btn-wa {
+    background: var(--wa);
+    color: #fff;
   }
-  .stepper button { background: none; border: none; color: var(--text); font-size: 18px; font-weight: 900; cursor: pointer; width: 24px; }
-  .stepper span { font-size: 14px; font-weight: 900; min-width: 16px; text-align: center; }
-
-  /* Floating Bottom Check */
-  .checkout-strip {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--bottom);
-    border-top: 1px solid var(--card-border);
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 99;
+  .btn-wa:hover {
+    background: var(--wa-hover);
   }
-  .checkout-strip .price-wrap span { font-size: 11px; font-weight: 800; color: var(--sub); display: block; }
-  .checkout-strip .price-wrap h2 { font-size: 20px; font-weight: 900; }
-
-  .order-btn {
+  .btn-save {
     background: var(--accent);
-    color: #000;
-    border: none;
-    font-weight: 900;
-    padding: 13px 24px;
-    border-radius: 12px;
-    font-size: 13px;
-    cursor: pointer;
-    box-shadow: 0 4px 14px var(--accent-glow);
+    color: #fff;
   }
-  body.theme-pink .order-btn { color: #fff; }
-
-  /* Modal */
-  #orderModal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 105;
-    align-items: flex-end;
-    justify-content: center;
+  .btn-save:hover {
+    background: var(--accent-hover);
   }
-  .sheet {
-    background: var(--card);
-    width: 100%;
-    max-width: 520px;
-    border-radius: 22px 22px 0 0;
-    padding: 22px;
-    border: 1px solid var(--card-border);
-    max-height: 85vh;
-    overflow-y: auto;
-  }
-  .sheet h2 { font-size: 18px; font-weight: 900; margin-bottom: 12px; }
-  .sheet input, .sheet textarea, .sheet select {
-    width: 100%;
-    padding: 12px;
-    background: var(--bg);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
+  .btn-print {
+    background: transparent;
+    border: 1px solid var(--border);
     color: var(--text);
-    margin-bottom: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    outline: none;
   }
 
-  .split-box {
-    background: var(--bg);
-    border: 1px dashed var(--card-border);
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  /* History Table */
+  .table-box {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 12px;
-    font-weight: 800;
+    min-width: 450px;
   }
-  .split-box input { width: 60px; margin-bottom: 0; padding: 6px; text-align: center; }
-
-  .dispatch-btn {
-    width: 100%;
-    background: #22c55e;
-    color: #000;
-    font-weight: 900;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    cursor: pointer;
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
   }
-  .close-modal-btn {
-    width: 100%;
+  th {
+    color: var(--sub);
+    font-weight: 700;
+  }
+  .btn-del {
     background: transparent;
     border: none;
-    color: var(--sub);
-    padding: 10px;
-    margin-top: 6px;
-    font-weight: 800;
+    color: var(--danger);
+    font-size: 13px;
     cursor: pointer;
-    font-size: 12px;
+    font-weight: bold;
+  }
+
+  /* Print Receipt Styling */
+  @media print {
+    body {
+      background: #fff;
+      color: #000;
+      padding: 0;
+    }
+    .header, .btn-group, .card:not(#receiptCard), .history-section {
+      display: none !important;
+    }
+    #receiptCard {
+      background: #fff !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      box-shadow: none !important;
+      max-width: 100%;
+    }
+    .summary-box {
+      background: #f8fafc !important;
+      border: 1px solid #ccc !important;
+    }
+    .summary-row, .summary-row.bold, .summary-row.total {
+      color: #000 !important;
+    }
   }
 </style>
 </head>
-<body class="theme-batman">
-
-<header>
-  <div class="header-main">
-    <div>
-      <h1 class="brand-title" id="logoText">🦇 PHULERA EATS</h1>
-      <div class="brand-tag" id="modeTag">GOTHAM EDITION • DROP ZERO</div>
-    </div>
-    <div class="cart-pill" onclick="openOrderSheet()">CART: <span id="cartCount">0</span></div>
-  </div>
-
-  <div class="vibe-switch-bar">
-    <button class="vibe-btn active" id="btnBat" onclick="switchTheme('batman')">🦇 Gotham Stealth</button>
-    <button class="vibe-btn" id="btnCoquette" onclick="switchTheme('pink')">🎀 Barbie Coquette</button>
-  </div>
-</header>
+<body>
 
 <div class="container">
-  <div class="vibe-banner">
-    <span id="bannerMsg">⚡ Free Delivery unlocked over ₹199</span>
-    <span id="bannerMoji">🛵 Fast AF</span>
+  
+  <div class="header">
+    <h1>🏠 2nd FLOOR RENT & ELECTRICITY</h1>
+    <p>Monthly Calculation & WhatsApp Receipt Generator</p>
   </div>
 
-  <div class="outlet-box">
-    <label>Choose Spot</label>
-    <select id="outletSelect" onchange="renderMenu()">
-      <option value="station">Station Fast Food (Burgers & Cold Brews)</option>
-      <option value="sweet">Shree Krishna (Samosa & Kaju Katli)</option>
-      <option value="cafe">Town Central (Cheesy Fries & Pizzas)</option>
-    </select>
-  </div>
-
-  <div class="catalog-header">
-    <span>LATE NIGHT DROPS</span>
-    <span id="mascotTag">Bat-Protocol Active</span>
-  </div>
-
-  <div id="itemsGrid"></div>
-</div>
-
-<div class="checkout-strip">
-  <div class="price-wrap">
-    <span>TOTAL BILL</span>
-    <h2>₹<span id="totalDisplay">0</span></h2>
-  </div>
-  <button class="order-btn" onclick="openOrderSheet()">CHECKOUT ➔</button>
-</div>
-
-<div id="orderModal">
-  <div class="sheet">
-    <h2>Secure Your Drop</h2>
-    
-    <div class="split-box">
-      <span>Split with squad?</span>
+  <div class="card" id="receiptCard">
+    <div class="form-grid">
       <div>
-        <input type="number" id="splitCount" min="1" max="10" value="1" oninput="calculateSplit()">
-        <span style="font-size: 10px; opacity:0.8;">heads</span>
+        <label>Billing Month</label>
+        <select id="billMonth" onchange="calcTotal()">
+          <option>January</option>
+          <option>February</option>
+          <option>March</option>
+          <option>April</option>
+          <option>May</option>
+          <option>June</option>
+          <option>July</option>
+          <option>August</option>
+          <option>September</option>
+          <option>October</option>
+          <option>November</option>
+          <option>December</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Tenant Name / Room</label>
+        <input type="text" id="tenantName" value="2nd Floor Family" placeholder="Tenant Name">
+      </div>
+
+      <div>
+        <label>Previous Reading (Old)</label>
+        <input type="number" id="prevReading" placeholder="e.g. 1200" oninput="calcTotal()">
+      </div>
+
+      <div>
+        <label>Current Reading (New)</label>
+        <input type="number" id="currReading" placeholder="e.g. 1320" oninput="calcTotal()">
+      </div>
+
+      <div>
+        <label>Unit Rate (₹ / Unit)</label>
+        <input type="number" id="unitRate" value="8.5" step="0.1" oninput="calcTotal()">
+      </div>
+
+      <div>
+        <label>Monthly Room Rent (₹)</label>
+        <input type="number" id="baseRent" value="6000" placeholder="Rent Amount" oninput="calcTotal()">
+      </div>
+
+      <div class="full-width">
+        <label>Extra / Water Charge (₹)</label>
+        <input type="number" id="extraCharge" value="0" placeholder="Optional charge" oninput="calcTotal()">
+      </div>
+
+      <div class="full-width">
+        <label>Tenant WhatsApp Number (Optional)</label>
+        <input type="tel" id="tenantPhone" placeholder="91XXXXXXXXXX (Direct Chat ke liye)">
       </div>
     </div>
-    <div id="splitResult" style="font-size: 11px; font-weight:800; color: var(--accent); margin-bottom: 10px;"></div>
 
-    <input type="text" id="orderName" placeholder="What's your name?">
-    <input type="tel" id="orderPhone" placeholder="10-digit WhatsApp number">
-    <textarea id="orderAddress" rows="2" placeholder="Exact Location / Landmark / Room No. (Phulera)"></textarea>
+    <!-- Live Breakdown Box -->
+    <div class="summary-box">
+      <div class="summary-row">
+        <span>Units Consumed:</span>
+        <span id="lblUnits">0 units</span>
+      </div>
+      <div class="summary-row">
+        <span>Electricity Cost (<span id="lblRate">8.5</span>/u):</span>
+        <span id="lblElecBill">₹0</span>
+      </div>
+      <div class="summary-row">
+        <span>Base Rent:</span>
+        <span id="lblRent">₹6,000</span>
+      </div>
+      <div class="summary-row" id="rowExtra" style="display:none;">
+        <span>Other Charges:</span>
+        <span id="lblExtra">₹0</span>
+      </div>
+      <div class="summary-row total">
+        <span>TOTAL DUE:</span>
+        <span id="lblTotal">₹6,000</span>
+      </div>
+    </div>
 
-    <select id="orderPay">
-      <option value="UPI / QR Code on Delivery">📲 UPI / QR Scan on Drop</option>
-      <option value="Cash on Delivery">💵 Cash on Delivery</option>
-    </select>
-
-    <button class="dispatch-btn" onclick="dispatchOrder()">DISPATCH VIA WHATSAPP</button>
-    <button class="close-modal-btn" onclick="closeOrderSheet()">Close</button>
+    <div class="btn-group">
+      <button class="btn btn-wa" onclick="sendWhatsApp()">
+        <span>📲 Share Bill on WhatsApp</span>
+      </button>
+      <button class="btn btn-save" onclick="saveRecord()">
+        <span>💾 Save This Month Record</span>
+      </button>
+      <button class="btn btn-print" onclick="window.print()">
+        <span>🖨️ Print / Download Slip</span>
+      </button>
+    </div>
   </div>
+
+  <!-- History Section -->
+  <div class="card history-section">
+    <label>Saved Records History</label>
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Readings</th>
+            <th>Units</th>
+            <th>Elec. Bill</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <!-- Populated from LocalStorage -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <script>
-  const WHATSAPP_NUMBER = "917665219980";
+  // Set current month automatically
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById('billMonth').value = months[new Date().getMonth()];
 
-  const menus = {
-    station: [
-      { id: 's1', name: 'Crispy Double-Cheese Burger', price: 60, tag: 'Bestseller 🔥', shop: 'Station Fast Food' },
-      { id: 's2', name: 'Peri Peri Seasoned Fries', price: 70, tag: 'Must Try 🍟', shop: 'Station Fast Food' },
-      { id: 's3', name: 'Stuffed Paneer Patties', price: 35, tag: 'Crispy ✨', shop: 'Station Fast Food' },
-      { id: 's4', name: 'Iced Cold Coffee with Scoop', price: 60, tag: 'Chilled ☕', shop: 'Station Fast Food' }
-    ],
-    sweet: [
-      { id: 'sw1', name: 'Special Masala Pyaz Kachori (2 Pcs)', price: 40, tag: 'Spicy 🥟', shop: 'Shree Krishna' },
-      { id: 'sw2', name: 'Desi Ghee Samosa (2 Pcs)', price: 30, tag: 'Classic 🥟', shop: 'Shree Krishna' },
-      { id: 'sw3', name: 'Premium Kaju Katli (250g)', price: 240, tag: 'Pure Desi 🍬', shop: 'Shree Krishna' },
-      { id: 'sw4', name: 'Hot Sugar Syrup Gulab Jamun (4 Pcs)', price: 60, tag: 'Sweet Tooth 🍯', shop: 'Shree Krishna' }
-    ],
-    cafe: [
-      { id: 'c1', name: 'Four-Cheese Grilled Sandwich', price: 80, tag: 'Cheesy 🥪', shop: 'Town Central' },
-      { id: 'c2', name: 'Creamy Alfredo Pasta', price: 120, tag: 'Italian 🍝', shop: 'Town Central' },
-      { id: 'c3', name: 'Oreo Blast Thickshake', price: 70, tag: 'Thick AF 🧋', shop: 'Town Central' },
-      { id: 'c4', name: 'Farmhouse Loaded Pizza', price: 130, tag: 'Top Tier 🍕', shop: 'Town Central' }
-    ]
-  };
+  function calcTotal() {
+    const prev = parseFloat(document.getElementById('prevReading').value) || 0;
+    const curr = parseFloat(document.getElementById('currReading').value) || 0;
+    const rate = parseFloat(document.getElementById('unitRate').value) || 8.5;
+    const rent = parseFloat(document.getElementById('baseRent').value) || 0;
+    const extra = parseFloat(document.getElementById('extraCharge').value) || 0;
 
-  let cart = {};
+    let units = 0;
+    if (curr >= prev && prev > 0) {
+      units = curr - prev;
+    }
 
-  function switchTheme(theme) {
-    const b = document.body;
-    const btnB = document.getElementById('btnBat');
-    const btnP = document.getElementById('btnCoquette');
-    const logo = document.getElementById('logoText');
-    const tag = document.getElementById('modeTag');
-    const mascot = document.getElementById('mascotTag');
+    const elecTotal = Math.round(units * rate);
+    const grandTotal = Math.round(elecTotal + rent + extra);
 
-    if (theme === 'pink') {
-      b.className = 'theme-pink';
-      btnP.classList.add('active');
-      btnB.classList.remove('active');
-      logo.innerHTML = "🎀 PHULERA EATS";
-      tag.textContent = "COQUETTE PINK EDITION • CUTE VIBES";
-      mascot.textContent = "Barbie Mode ✨";
+    document.getElementById('lblUnits').textContent = units + " units";
+    document.getElementById('lblRate').textContent = rate;
+    document.getElementById('lblElecBill').textContent = "₹" + elecTotal.toLocaleString('en-IN');
+    document.getElementById('lblRent').textContent = "₹" + rent.toLocaleString('en-IN');
+    
+    if (extra > 0) {
+      document.getElementById('rowExtra').style.display = 'flex';
+      document.getElementById('lblExtra').textContent = "₹" + extra.toLocaleString('en-IN');
     } else {
-      b.className = 'theme-batman';
-      btnB.classList.add('active');
-      btnP.classList.remove('active');
-      logo.innerHTML = "🦇 PHULERA EATS";
-      tag.textContent = "GOTHAM STEALTH • DROP ZERO";
-      mascot.textContent = "Bat-Protocol Active ⚡";
+      document.getElementById('rowExtra').style.display = 'none';
     }
+
+    document.getElementById('lblTotal').textContent = "₹" + grandTotal.toLocaleString('en-IN');
+
+    return { prev, curr, rate, units, elecTotal, rent, extra, grandTotal };
   }
 
-  function renderMenu() {
-    const shopKey = document.getElementById('outletSelect').value;
-    const items = menus[shopKey];
-    const grid = document.getElementById('itemsGrid');
-    grid.innerHTML = "";
+  function sendWhatsApp() {
+    const data = calcTotal();
+    const month = document.getElementById('billMonth').value;
+    const tenant = document.getElementById('tenantName').value || "Tenant";
+    const phone = document.getElementById('tenantPhone').value.trim();
 
-    items.forEach(item => {
-      const count = cart[item.id] ? cart[item.id].qty : 0;
-      const card = document.createElement('div');
-      card.className = 'card-item';
-      card.innerHTML = `
-        <div>
-          <h3>${item.name}</h3>
-          <div class="tags">${item.tag}</div>
-          <div class="price">₹${item.price}</div>
-        </div>
-        <div class="stepper">
-          <button onclick="updateItem('${item.id}', '${item.name}', ${item.price}, '${item.shop}', -1)">-</button>
-          <span>${count}</span>
-          <button onclick="updateItem('${item.id}', '${item.name}', ${item.price}, '${item.shop}', 1)">+</button>
-        </div>
+    const message = 
+`*RENT & ELECTRICITY BILL - ${month.toUpperCase()}* 🏠
+--------------------------------
+Hello *${tenant}*,
+
+Here are the billing details for *${month}*:
+
+⚡ *Electricity Meter:*
+• Previous Reading: ${data.prev}
+• Current Reading: ${data.curr}
+• Total Units Consumed: *${data.units} units*
+• Rate per Unit: ₹${data.rate}
+• Electricity Bill: *₹${data.elecTotal.toLocaleString('en-IN')}*
+
+🏠 *Room Rent:* ₹${data.rent.toLocaleString('en-IN')}
+${data.extra > 0 ? `➕ *Extra / Other Charges:* ₹${data.extra.toLocaleString('en-IN')}\n` : ''}--------------------------------
+💰 *TOTAL PAYABLE: ₹${data.grandTotal.toLocaleString('en-IN')}*
+--------------------------------
+_Please send payment via UPI / Cash once verified. Thank you!_`;
+
+    const encodedMsg = encodeURIComponent(message);
+    let waUrl = `https://wa.me/?text=${encodedMsg}`;
+    if (phone) {
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      waUrl = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
+    }
+
+    window.open(waUrl, '_blank');
+  }
+
+  function saveRecord() {
+    const data = calcTotal();
+    const month = document.getElementById('billMonth').value;
+    const year = new Date().getFullYear();
+
+    const record = {
+      id: Date.now(),
+      month: `${month} ${year}`,
+      readings: `${data.prev} → ${data.curr}`,
+      units: data.units,
+      elec: data.elecTotal,
+      total: data.grandTotal
+    };
+
+    let history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
+    history.unshift(record);
+    localStorage.setItem('tenant_bill_records', JSON.stringify(history));
+
+    // Next time previous reading automatically becomes this month current
+    if (data.curr > 0) {
+      document.getElementById('prevReading').value = data.curr;
+      document.getElementById('currReading').value = "";
+    }
+
+    renderHistory();
+    alert("Record successfully saved!");
+  }
+
+  function deleteRecord(id) {
+    let history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
+    history = history.filter(item => item.id !== id);
+    localStorage.setItem('tenant_bill_records', JSON.stringify(history));
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('tenant_bill_records') || '[]');
+    const tbody = document.getElementById('historyBody');
+    tbody.innerHTML = '';
+
+    if (history.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--sub);">No previous records saved yet.</td></tr>';
+      return;
+    }
+
+    history.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.month}</strong></td>
+        <td>${item.readings}</td>
+        <td>${item.units} u</td>
+        <td>₹${item.elec.toLocaleString('en-IN')}</td>
+        <td style="color:var(--accent); font-weight:bold;">₹${item.total.toLocaleString('en-IN')}</td>
+        <td><button class="btn-del" onclick="deleteRecord(${item.id})">✕</button></td>
       `;
-      grid.appendChild(card);
+      tbody.appendChild(tr);
     });
-  }
 
-  function updateItem(id, name, price, shop, delta) {
-    if (!cart[id]) cart[id] = { name: name, price: price, shop: shop, qty: 0 };
-    cart[id].qty += delta;
-
-    if (cart[id].qty <= 0) delete cart[id];
-
-    renderMenu();
-    updateCartStats();
-  }
-
-  function updateCartStats() {
-    let sub = 0, count = 0;
-    for (let k in cart) {
-      sub += cart[k].price * cart[k].qty;
-      count += cart[k].qty;
+    // Auto set previous reading from latest record if field is empty
+    if (history.length > 0 && !document.getElementById('prevReading').value) {
+      const lastReading = history[0].readings.split('→')[1];
+      if (lastReading) {
+        document.getElementById('prevReading').value = lastReading.trim();
+        calcTotal();
+      }
     }
-
-    let delFee = sub >= 199 || sub === 0 ? 0 : 20;
-    let total = sub + delFee;
-
-    document.getElementById('cartCount').textContent = count;
-    document.getElementById('totalDisplay').textContent = total;
-
-    const banner = document.getElementById('bannerMsg');
-    if (sub === 0) banner.textContent = "⚡ Free Delivery unlocked over ₹199";
-    else if (sub >= 199) banner.textContent = "🎉 Free Delivery Unlocked (W Move!)";
-    else banner.textContent = `Add ₹${199 - sub} more for FREE delivery`;
-
-    calculateSplit();
   }
 
-  function calculateSplit() {
-    let total = parseInt(document.getElementById('totalDisplay').textContent) || 0;
-    let heads = parseInt(document.getElementById('splitCount').value) || 1;
-    if (heads < 1) heads = 1;
-    let perHead = Math.ceil(total / heads);
-    document.getElementById('splitResult').textContent = `👉 ₹${perHead} / person (${heads} gang members)`;
-  }
-
-  function openOrderSheet() {
-    if (Object.keys(cart).length === 0) {
-      alert("Cart empty hai bro! Pehle kuch mast select kar!");
-      return;
-    }
-    calculateSplit();
-    document.getElementById('orderModal').style.display = 'flex';
-  }
-
-  function closeOrderSheet() {
-    document.getElementById('orderModal').style.display = 'none';
-  }
-
-  function dispatchOrder() {
-    const name = document.getElementById('orderName').value.trim();
-    const phone = document.getElementById('orderPhone').value.trim();
-    const addr = document.getElementById('orderAddress').value.trim();
-    const pay = document.getElementById('orderPay').value;
-
-    if (!name || !phone || !addr) {
-      alert("Address and Name miss mat kar bro! Pura details daalo.");
-      return;
-    }
-
-    let itemsMap = {};
-    let subTotal = 0;
-
-    for (let id in cart) {
-      let item = cart[id];
-      if (!itemsMap[item.shop]) itemsMap[item.shop] = [];
-      itemsMap[item.shop].push(item);
-      subTotal += item.price * item.qty;
-    }
-
-    let orderList = "";
-    for (let s in itemsMap) {
-      orderList += `\n📍 *${s}*\n`;
-      itemsMap[s].forEach(i => {
-        orderList += `  • ${i.name} [x${i.qty}] = ₹${i.price * i.qty}\n`;
-      });
-    }
-
-    let del = subTotal >= 199 ? 0 : 20;
-    let grand = subTotal + del;
-
-    let msg = `*⚡ NEW FOOD DROP: PHULERA EATS ⚡*\n` +
-              `*Gang Member:* ${name} (${phone})\n` +
-              `*Drop Location:* ${addr}\n` +
-              `-------------------------------------\n` +
-              `*ITEMS ORDERED:*` +
-              orderList +
-              `-------------------------------------\n` +
-              `*Subtotal:* ₹${subTotal}\n` +
-              `*Delivery:* ${del === 0 ? "FREE (Secured)" : "₹" + del}\n` +
-              `*TOTAL TO PAY:* ₹${grand}\n` +
-              `*Payment Option:* ${pay}\n\n` +
-              `🚀 *Status:* Drop the order ASAP!`;
-
-    window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`, '_blank');
-  }
-
-  renderMenu();
+  // Initial Run
+  renderHistory();
+  calcTotal();
 </script>
 </body>
 </html>
-
